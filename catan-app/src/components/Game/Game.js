@@ -1,6 +1,6 @@
 import React from "react";
-import Player from "./Players";
-import Dice from "./Dice";
+import Players from "./Players/Players";
+import Dice from "./Dice/Dice";
 class Game extends  React.Component{
     constructor(props){
         super(props)
@@ -8,7 +8,7 @@ class Game extends  React.Component{
     render(){
         return(
             <div>
-                <Player/>
+                <Players/>
                 {/* <Dice/> */}
             </div>
         )

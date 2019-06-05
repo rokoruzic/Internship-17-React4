@@ -1,29 +1,36 @@
-import React from 'react';
+import React from "react";
 import Board from "./components/Game/Board/Board";
 import Game from "./components/Game/Game";
-import {BoardNumbers,shuffle,FieldTypes} from "./components/Game/Board/BoardNumbers"
+import {
+  BoardNumbers,
+  shuffle,
+  FieldTypes
+} from "./components/Game/Board/BoardNumbers";
+import { Provider } from "react-redux";
+import store from "./redux";
 
-
-class  App extends React.Component {
-  constructor(props){
-    
+class App extends React.Component {
+  constructor(props) {
     super(props);
   }
 
-  render(){
+  render() {
     shuffle(BoardNumbers);
     shuffle(FieldTypes);
-    var shuffledBoard = BoardNumbers.map((obj,i) =>{ 
-      var rObj = {id:i,number:obj,type:FieldTypes[i]};
+    var shuffledBoard = BoardNumbers.map((obj, i) => {
+      var rObj = { id: i, number: obj, type: FieldTypes[i] };
       return rObj;
-   });
-   console.log(shuffledBoard);
+    });
+    console.log(shuffledBoard);
 
     return (
-      <Game/>
-     );
+      <>
+        <Provider store={store}>
+          <Game />
+        </Provider>
+      </>
+    );
   }
- 
 }
 
 export default App;

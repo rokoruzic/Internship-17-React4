@@ -1,0 +1,119 @@
+.hex-top {
+  width: 0;
+  border-bottom: 30px solid;
+  border-left: 52px solid transparent;
+  border-right: 52px solid transparent;
+}
+.wrapper{
+  margin-top: 5%;
+}
+.field-row{
+  display: flex;
+  justify-content: center;
+  margin-top: -30px;
+}
+
+.hex-middle {
+  width: 104px;
+  height: 60px;
+  background-color: black
+}
+.hex-bottom {
+  width: 0;
+  border-top: 30px solid;
+  border-left: 52px solid transparent;
+  border-right: 52px solid transparent;
+}
+.road {
+  width: 50px;
+  height: 6px;
+  position: absolute;
+  background-color: gray
+}
+.road-top-right {
+  top: 12px;
+  right: 2px;
+  transform: rotate(30deg);
+}
+.road-top-left {
+  top: 12px;
+  transform: rotate(-30deg);
+}
+.road-right {
+  right: 2px;
+  top: 50%;
+  bottom: 50%;
+  transform: rotate(90deg) translate(0, -27px);
+}
+.road-left {
+  left: 2px;
+  top: 50%;
+  bottom: 50%;
+  transform: rotate(90deg) translate(0, 27px);
+}
+.road-bottom-right {
+  bottom: 12px;
+  right: 2px;
+  transform: rotate(-30deg);
+}
+.road-bottom-left {
+  bottom: 12px;
+  transform: rotate(30deg);
+}
+
+.field{
+  width: 104px;
+  height: 120px;
+  position: relative;
+
+}
+
+.crossroad {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  background-color: pink
+}
+.crossroad-top {
+  top: 0;
+  left: 50%;
+  right: 50%;
+  transform: translate(-10px, -10px);
+}
+.crossroad-top-left {
+  top: 30px;
+  transform: translate(-10px, -10px);
+}
+.crossroad-top-right {
+  top: 30px;
+  right: 0;
+  transform: translate(10px, -10px);
+}
+.crossroad-bottom {
+  bottom: 0;
+  left: 50%;
+  right: 50%;
+  transform: translate(-10px, 10px);
+}
+.crossroad-bottom-left {
+  bottom: 30px;
+  transform: translate(-10px, 10px);
+}
+.crossroad-bottom-right {
+  bottom: 30px;
+  right: 0;
+  transform: translate(10px, 10px);
+}
+.dice-index {
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-11px, -11px);
+  position: absolute;
+  text-align: center;
+  line-height: 20px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 50%;
+}

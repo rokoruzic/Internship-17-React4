@@ -1,4 +1,4 @@
-export const SettlementCoords = {
+ const SettlementCoords = {
     0:{
         1:[{fieldId:1,settlementId:5}],
         2:[{fieldId:1,settlementId:4},{fieldId:4,settlementId:0}],
@@ -134,7 +134,6 @@ export const SettlementCoords = {
         5:[{fieldId:14,settlementId:3},{fieldId:17,settlementId:1}],
     }
 }
-Collapse
-
+export default SettlementCoords;
 
 

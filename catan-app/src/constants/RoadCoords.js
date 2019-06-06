@@ -1,4 +1,4 @@
-export const RoadCoords = {
+const  RoadCoords = {
     0:{
         1:{fieldId:1,roadId:4},
         2:{fieldId:4,roadId:5},
@@ -125,3 +125,4 @@ export const RoadCoords = {
         5:{fieldId:14,roadId:2},
     },
 }
+export default RoadCoords;

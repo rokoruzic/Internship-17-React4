@@ -59,7 +59,7 @@ const reducer = (state = initialState, action) => {
         var playerToEdit = players.find(x=>x.id===state.playerTurnId)
         playerToEdit.points += action.payload;
         return Object.assign({}, state, {
-            players
+            players:players
         });
 
 
@@ -76,15 +76,14 @@ const reducer = (state = initialState, action) => {
 
 
         case SUBSTRACT_PLAYER_CARDS:
-        let players = [...state.players];
-        var playerToEdit = players.find(x=>x.id===state.playerTurnId)
-        console.log(playerToEdit)
+        let playersList = [...state.players];
+        var playerToEdit = playersList.find(x=>x.id===state.playerTurnId)
         playerToEdit.grain-=1;
         playerToEdit.lumber-=1;
         playerToEdit.wool-=1;
         playerToEdit.brick-=1;
         return Object.assign({}, state, {
-            players
+            players:playersList
         });
 
 

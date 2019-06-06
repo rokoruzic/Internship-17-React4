@@ -60,6 +60,9 @@ class Players extends React.Component {
     if (this.state.counter === this.state.players.length - 1)
       this.setState({ counter: 0 });
     else this.setState({ counter: this.state.counter + 1 });
+
+
+    
     setPlayerTurn(this.state.players[this.state.counter].id)
 
     editPlayerPoints(3);

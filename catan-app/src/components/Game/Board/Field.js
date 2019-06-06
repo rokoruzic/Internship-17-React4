@@ -60,12 +60,25 @@ class Field extends React.Component {
             style={{ backgroundColor: this.state.colour }}
           className="road road-top-left" id={5} />
 
-          <Settlement className="crossroad crossroad-top" id={0} />
-          <Settlement className="crossroad crossroad-top-right" id={1} />
-          <Settlement className="crossroad crossroad-bottom-right" id={2} />
-          <Settlement className="crossroad crossroad-bottom" id={3} />
-          <Settlement className="crossroad crossroad-bottom-left" id={4} />
-          <Settlement className="crossroad crossroad-top-left" id={5} />
+          <Settlement 
+          fieldId={this.props.id}
+           className="crossroad crossroad-top" id={0} />
+          <Settlement 
+          fieldId={this.props.id}
+          className="crossroad crossroad-top-right" id={1} />
+          <Settlement
+          fieldId={this.props.id}
+          className="crossroad crossroad-bottom-right" id={2} />
+          <Settlement 
+          fieldId={this.props.id}
+
+          className="crossroad crossroad-bottom" id={3} />
+          <Settlement
+          fieldId={this.props.id}
+          className="crossroad crossroad-bottom-left" id={4} />
+          <Settlement 
+          fieldId={this.props.id}
+          className="crossroad crossroad-top-left" id={5} />
 
           <div onClick={this.props.handleClick} className="dice-index">
             {this.props.number}

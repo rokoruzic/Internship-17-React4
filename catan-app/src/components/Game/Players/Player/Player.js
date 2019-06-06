@@ -8,7 +8,7 @@ class Player extends React.Component{
         var styleColor = {color:this.props.color}
         return(<>
         <li style={styleColor} key = {this.props.id}>
-        {this.props.name} {this.props.id} 
+        {this.props.name} 
         </li>
         </>)
     }

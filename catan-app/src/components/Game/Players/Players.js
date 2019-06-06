@@ -2,38 +2,75 @@ import React from "react";
 import "./Players.css";
 import Player from "./Player/Player";
 import PlayerInput from "./PlayerInput";
+import { connect } from "react-redux";
+import {addPlayer, editPlayerPoints,setPlayerTurn,substractPlayerCards} from "./../../../redux/modules/player"
 const colors = ["red", "blue", "green", "pink"];
+
 class Players extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      player: [],
+      players: [],
       startPlaying: false,
       counter: 0
     };
   }
 
   handleClick = value => {
+    const { addPlayer } = this.props;
+
+
     var newPlayer = {
       name: value,
       id: Math.random(),
-      color: colors[this.state.player.length]
+      color: colors[this.state.players.length],
+      points:0,
+      brick:0,
+      lumber:0,
+      wool:0,
+      grain:0
     };
-    this.setState({ player: this.state.player.concat(newPlayer) });
+    this.setState({ players: this.state.players.concat(newPlayer) });
+    addPlayer(newPlayer);
+
+
   };
 
-  handleStartPlaying = () => {
+  handleStartPlaying = async () => {
     this.setState({ startPlaying: true });
-  };
+    const { setPlayerTurn } = this.props;
 
+
+   await this.setState(state => ({
+      ...state,
+      players: state.players.sort(function(a, b) {
+        return a.id - b.id;
+     })}))
+
+     setPlayerTurn(this.state.players[0].id)
+     console.log(this.state.players[0].id)
+
+  
+  };
   handleCounter = () => {
-    if (this.state.counter === this.state.player.length - 1)
+    const { setPlayerTurn } = this.props;
+    const { editPlayerPoints } = this.props;
+
+
+    if (this.state.counter === this.state.players.length - 1)
       this.setState({ counter: 0 });
     else this.setState({ counter: this.state.counter + 1 });
+    setPlayerTurn(this.state.players[this.state.counter].id)
+
+    editPlayerPoints(3);
+
+
+
   };
 
   render() {
-    const listItems = this.state.player.map(player => (
+
+    const listItems = this.state.players.map(player => (
       <Player
         id={player.id}
         name={player.name}
@@ -42,9 +79,7 @@ class Players extends React.Component {
       />
     ));
 
-    var randomizedList = this.state.player.sort(function(a, b) {
-      return a.id - b.id;
-    });
+   
 
     return (
       <div>
@@ -60,8 +95,8 @@ class Players extends React.Component {
         
         <div>
           {" "}
-          {this.state.player.length > 0
-            ? randomizedList[0 + this.state.counter].name
+          {this.state.players.length > 0
+            ? this.state.players[0 + this.state.counter].name
             : "no players"}{" "}
         </div>
         <button
@@ -74,4 +109,21 @@ class Players extends React.Component {
     );
   }
 }
-export default Players;
+
+
+const mapDispatchToProps = {
+  addPlayer,
+  editPlayerPoints,
+  setPlayerTurn,
+  substractPlayerCards
+
+};
+const mapStateToProps = state => ({
+  players: state.player.players,
+  
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Players);

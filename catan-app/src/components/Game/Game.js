@@ -9,8 +9,8 @@ class Game extends  React.Component{
     render(){
         return(
             <div>
-                {/* <Players/> */}
-                {/* <Dice/> */}
+                <Players/>
+                <Dice/>
                 <Board/>
             </div>
         )

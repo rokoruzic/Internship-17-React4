@@ -3,7 +3,12 @@ import "./Players.css";
 import Player from "./Player/Player";
 import PlayerInput from "./PlayerInput";
 import { connect } from "react-redux";
-import {addPlayer, editPlayerPoints,setPlayerTurn,substractPlayerCards} from "./../../../redux/modules/player"
+import {
+  addPlayer,
+  editPlayerPoints,
+  setPlayerTurn,
+  substractPlayerCards
+} from "./../../../redux/modules/player";
 const colors = ["red", "blue", "green", "pink"];
 
 class Players extends React.Component {
@@ -12,67 +17,84 @@ class Players extends React.Component {
     this.state = {
       players: [],
       startPlaying: false,
-      counter: 0
+      counter: 0,
+      clickCounter: 0,
+      twoTurnsIsFinished: false,
+      isListReversed: false
     };
   }
 
   handleClick = value => {
     const { addPlayer } = this.props;
 
-
     var newPlayer = {
       name: value,
       id: Math.random(),
       color: colors[this.state.players.length],
-      points:0,
-      brick:0,
-      lumber:0,
-      wool:0,
-      grain:0
+      points: 0,
+      brick: 0,
+      lumber: 0,
+      wool: 0,
+      grain: 0
     };
     this.setState({ players: this.state.players.concat(newPlayer) });
     addPlayer(newPlayer);
-
-
   };
 
   handleStartPlaying = async () => {
     this.setState({ startPlaying: true });
     const { setPlayerTurn } = this.props;
 
-
-   await this.setState(state => ({
+    await this.setState(state => ({
       ...state,
       players: state.players.sort(function(a, b) {
         return a.id - b.id;
-     })}))
+      })
+    }));
 
-     setPlayerTurn(this.state.players[0].id)
-     console.log(this.state.players[0].id)
-
-  
+    setPlayerTurn(this.state.players[0].id);
   };
-  handleCounter = () => {
+  handleCounter = async () => {
     const { setPlayerTurn } = this.props;
     const { editPlayerPoints } = this.props;
 
+    var numberOfClicksOfOneTurn = this.state.players.length - 1;
+    if (
+      this.state.clickCounter < numberOfClicksOfOneTurn &&
+      !this.state.isListReversed
+    ) {
+      await this.setState({ clickCounter: this.state.clickCounter + 1 });
+    } else if (this.state.clickCounter === numberOfClicksOfOneTurn) {
+      await this.setState({
+        players: this.state.players.reverse(),
+        isListReversed: true,
+        clickCounter: this.state.clickCounter - 1
+      });
+    } else if (this.state.isListReversed) {
+      await this.setState({ clickCounter: this.state.clickCounter - 1 });
 
+      if (this.state.clickCounter === -2 && !this.state.twoTurnsIsFinished) {
+        await this.setState({
+          players: this.state.players.reverse(),
+          twoTurnsIsFinished: true
+        });
+
+        var firstPlayer = this.state.players.shift();
+        await this.setState({
+          players: this.state.players.concat(firstPlayer)
+        });
+      }
+    }
     if (this.state.counter === this.state.players.length - 1)
-      this.setState({ counter: 0 });
-    else this.setState({ counter: this.state.counter + 1 });
+      await this.setState({ counter: 0 });
+    else await this.setState({ counter: this.state.counter + 1 });
 
-
-    
-    setPlayerTurn(this.state.players[this.state.counter].id)
+    setPlayerTurn(this.state.players[this.state.counter].id);
 
     editPlayerPoints(3);
-
-
-
   };
 
   render() {
-
     const listItems = this.state.players.map(player => (
       <Player
         id={player.id}
@@ -82,20 +104,14 @@ class Players extends React.Component {
       />
     ));
 
-   
-
     return (
       <div>
-        <div className={this.state.startPlaying ? "hide" : "show"} >
-              <PlayerInput  handleClick={ this.handleClick} />
-              <div >
-                {listItems}
-              </div>
-              <button onClick={this.handleStartPlaying}  >
-                Start  playing
-              </button>
+        <div className={this.state.startPlaying ? "hide" : "show"}>
+          <PlayerInput handleClick={this.handleClick} />
+          <div>{listItems}</div>
+          <button onClick={this.handleStartPlaying}>Start playing</button>
         </div>
-        
+
         <div>
           {" "}
           {this.state.players.length > 0
@@ -113,17 +129,14 @@ class Players extends React.Component {
   }
 }
 
-
 const mapDispatchToProps = {
   addPlayer,
   editPlayerPoints,
   setPlayerTurn,
   substractPlayerCards
-
 };
 const mapStateToProps = state => ({
-  players: state.player.players,
-  
+  players: state.player.players
 });
 
 export default connect(

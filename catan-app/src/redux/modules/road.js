@@ -6,6 +6,7 @@ const SHOW_ERROR = "SHOW_ERROR";
 const INCREMENT_ID = "INCREMENT_ID";
 const ADD_ROAD = "ADD_ROAD";
 const CHECK_ROAD_CONNECTION = "CHECK_ROAD_CONNECTION";
+const CREATE_ROAD = "CREATE_ROAD";
 
 // initial state
 const initialState = {
@@ -20,6 +21,11 @@ export const applyRoad = () => {
     type: APPLY_ROAD
   };
 };
+export const createRoad = payload => dispatch => {
+    dispatch({
+      type: CREATE_ROAD,payload
+    });
+  };
 export const addRoad = road => dispatch => {
   if (road.isRoad)
     dispatch({
@@ -160,6 +166,12 @@ const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         roads: state.roads.concat(action.payload)
       });
+      
+      case CREATE_ROAD:
+      return Object.assign({}, state, {
+        roads: state.roads.concat(action.payload)
+      });
+
 
     default:
       return state;

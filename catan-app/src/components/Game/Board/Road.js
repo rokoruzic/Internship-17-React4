@@ -3,7 +3,7 @@ import "./Board.css";
 import RoadCoords from "./../../../constants/RoadCoords";
 import {addPlayer, editPlayerPoints,setPlayerTurn,substractPlayerCards} from "./../../../redux/modules/player";
 import { addRoad } from "../../../redux/modules/road";
-import {createRoad} from "../../../redux/modules/road";
+import {createRoad, addFirstRoad} from "../../../redux/modules/road";
 import { connect } from "react-redux";
 
 class Road extends React.Component {
@@ -18,6 +18,8 @@ class Road extends React.Component {
     // console.log(RoadCoords[this.props.fieldId][this.props.id]);
     const { addRoad } = this.props;
     const { createRoad } = this.props;
+    const { addFirstRoad } = this.props;
+
 
     // var neighbourFieldRoadLeft = { roadId: RoadCoords[this.props.fieldId][this.props.id].roadId+1, fieldId:RoadCoords[this.props.fieldId][this.props.id].fieldId}
     // var neighbourFieldRoadRight = { roadId: RoadCoords[this.props.fieldId][this.props.id].roadId-1, fieldId:RoadCoords[this.props.fieldId][this.props.id].fieldId}
@@ -46,9 +48,10 @@ class Road extends React.Component {
   //   if(neighbourLeft===undefined || neighbourRight===undefined)
   //   alert("no connected roads");
   //   else
-    addRoad(this.state.road);
 
     var roadToCreate = {id:this.props.id,fieldId:this.props.fieldId,playerId:this.props.currentPlayerId,color:currentPlayer.color}
+    addFirstRoad(roadToCreate);
+
     console.log(this.props.currentPlayerId)
 
 
@@ -68,7 +71,8 @@ class Road extends React.Component {
 }
 const mapDispatchToProps = {
   addRoad,
-  createRoad
+  createRoad,
+  addFirstRoad
 };
 const mapStateToProps = state => ({
   roads: state.road.roads,

@@ -7,6 +7,7 @@ const INCREMENT_ID = "INCREMENT_ID";
 const ADD_ROAD = "ADD_ROAD";
 const CHECK_ROAD_CONNECTION = "CHECK_ROAD_CONNECTION";
 const CREATE_ROAD = "CREATE_ROAD";
+const ADD_FIRST_ROAD = "ADD_FIRST_ROAD";
 
 // initial state
 const initialState = {
@@ -26,6 +27,13 @@ export const createRoad = payload => dispatch => {
       type: CREATE_ROAD,payload
     });
   };
+
+  export const addFirstRoad = payload => dispatch => {
+    dispatch({
+      type: ADD_FIRST_ROAD,payload
+    });
+  };
+
 export const addRoad = road => dispatch => {
   if (road.isRoad)
     dispatch({
@@ -66,7 +74,6 @@ export const addRoad = road => dispatch => {
   var settlementOneSubstitutions = SettlementCoords[neighbourSettlement1.fieldId][neighbourSettlement1.settlementId];
 
   if (settlementOneSubstitutions) {
-    console.log(settlementOneSubstitutions);
     var settlementOneSubstitutionsRoad1 = {  field: settlementOneSubstitutions[0].fieldId, roadId: settlementOneSubstitutions[0].settlementId - 1 };
     var settlementOneSubstitutionsRoad2 = { field: settlementOneSubstitutions[0].fieldId, roadId: settlementOneSubstitutions[0].settlementId };
 
@@ -96,7 +103,6 @@ export const addRoad = road => dispatch => {
   var settlementTwoSubstitutions = SettlementCoords[neighbourSettlement2.fieldId][neighbourSettlement2.settlementId];
 
   if (settlementTwoSubstitutions) {
-    console.log(settlementTwoSubstitutions);
 
       var settlementTwoSubstitutionsRoad1 = {  field: settlementTwoSubstitutions[0].fieldId, roadId: settlementTwoSubstitutions[0].settlementId - 1 };
       var settlementTwoSubstitutionsRoad2 = { field: settlementTwoSubstitutions[0].fieldId, roadId: settlementTwoSubstitutions[0].settlementId };
@@ -120,6 +126,9 @@ export const addRoad = road => dispatch => {
 
         neighbourRoads.push(settlementTwoSubstitutionsRoad1);
         neighbourRoads.push(settlementTwoSubstitutionsRoad2);
+
+
+        console.log(neighbourRoads);
     }
   }
 
@@ -151,6 +160,30 @@ const reducer = (state = initialState, action) => {
         isVisible: true,
         message: action.message
       };
+      case ADD_FIRST_ROAD:
+
+      var road = action.payload;
+      var neighbourSettlement1 = {
+        fieldId: road.fieldId,
+        settlementId: road.roadId
+      };
+      var neighbourSettlement2 = {
+        fieldId: road.fieldId,
+        settlementId: road.roadId + 1
+      };
+      if (road.roadId === 5)
+        neighbourSettlement2 = { fieldId: road.fieldId, settlementId: 0 };
+
+    var settlementOneSubstitutions = SettlementCoords[neighbourSettlement1.fieldId][neighbourSettlement1.settlementId];
+
+
+     var settlementTwoSubstitutions = SettlementCoords[neighbourSettlement2.fieldId][neighbourSettlement2.settlementId];
+
+
+    
+
+
+
     case SHOW_ERROR:
       return {
         ...state,

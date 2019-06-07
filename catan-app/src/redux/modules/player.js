@@ -2,95 +2,119 @@ import RoadCoords from "./../../constants/RoadCoords";
 import SettlementCoords from "./../../constants/SettlementCoords";
 // action types
 const ADD_PLAYER = "ADD_PLAYER";
-const EDIT_PLAYER_POINTS = "EDIT_PLAYER_POINTS"
-const SET_PLAYER_TURN = "SET_PLAYER_TURN"
-const SUBSTRACT_PLAYER_CARDS= "SUBSTRACT_PLAYER_CARDS"
-const ADD_PLAYER_CARDS = "ADD_PLAYER_CARDS"
+const EDIT_PLAYER_POINTS = "EDIT_PLAYER_POINTS";
+const SET_PLAYER_TURN = "SET_PLAYER_TURN";
+const SUBSTRACT_PLAYER_CARDS = "SUBSTRACT_PLAYER_CARDS";
+const ADD_PLAYER_CARDS = "ADD_PLAYER_CARDS";
+const EDIT_PLAYER_TURN = "EDIT_PLAYER_TURN";
+const EDIT_PLAYER_FIRST_CLICK = "EDIT_PLAYER_FIRST_CLICK";
 
 // initial state
 const initialState = {
-  players:[],
-  playerTurnId:0,
-  materialCost:{}
+  players: [],
+  playerTurnId: 0,
+  materialCost: {}
 };
 
 // action creators
-export const setPlayerTurn = (payload)=>dispatch=>{
-    dispatch({
-        type:SET_PLAYER_TURN,payload
-    })
-}
-export const addPlayer = (payload)=> dispatch =>{
-
+export const setPlayerTurn = payload => dispatch => {
   dispatch({
-    type: ADD_PLAYER,payload
+    type: SET_PLAYER_TURN,
+    payload
   });
 };
-export const editPlayerPoints = (payload) =>dispatch=>{
 
-    dispatch({
-        type:EDIT_PLAYER_POINTS,payload
-    });
+export const editPlayerTurn = () => dispatch => {
+  dispatch({
+    type: EDIT_PLAYER_TURN
+  });
 };
-export const substractPlayerCards = (payload) =>dispatch=>{
-    dispatch({
-        type:SUBSTRACT_PLAYER_CARDS,payload
-    })
-}
+export const editPlayerFirstClick = () => dispatch => {
+  dispatch({
+    type: EDIT_PLAYER_FIRST_CLICK
+  });
+};
+export const addPlayer = payload => dispatch => {
+  dispatch({
+    type: ADD_PLAYER,
+    payload
+  });
+};
+export const editPlayerPoints = payload => dispatch => {
+  dispatch({
+    type: EDIT_PLAYER_POINTS,
+    payload
+  });
+};
+export const substractPlayerCards = payload => dispatch => {
+  dispatch({
+    type: SUBSTRACT_PLAYER_CARDS,
+    payload
+  });
+};
 
-export const addPlayerCards = (payload) =>dispatch=>{
-    dispatch({
-        type:ADD_PLAYER_CARDS,payload
-    })
-}
-
+export const addPlayerCards = payload => dispatch => {
+  dispatch({
+    type: ADD_PLAYER_CARDS,
+    payload
+  });
+};
 
 // reducer
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-   
     case ADD_PLAYER:
       return Object.assign({}, state, {
         players: state.players.concat(action.payload)
       });
 
-      case EDIT_PLAYER_POINTS:
-        let players = [...state.players];
-        var playerToEdit = players.find(x=>x.id===state.playerTurnId)
-        playerToEdit.points += action.payload;
-        return Object.assign({}, state, {
-            players:players
-        });
+    case EDIT_PLAYER_POINTS:
+      let players = [...state.players];
+      var playerToEdit = players.find(x => x.id === state.playerTurnId);
+      playerToEdit.points += action.payload;
+      return Object.assign({}, state, {
+        players: players
+      });
+      case EDIT_PLAYER_FIRST_CLICK:
+      let playersFirstClick = [...state.players];
+      var playerFirstClickToEdit = playersFirstClick.find(x => x.id === state.playerTurnId);
+      playerFirstClickToEdit.firstClick=true
+      return Object.assign({}, state, {
+        players: playersFirstClick
+      });
 
+    case EDIT_PLAYER_TURN:
+      let playersList1 = [...state.players];
+      var playerTurnToEdit = playersList1.find(
+        x => x.id === state.playerTurnId
+      );
+      playerTurnToEdit.turn += 1;
+      return Object.assign({}, state, {
+        players: playersList1
+      });
 
-      case SET_PLAYER_TURN:
-        return {
-            ...state,
-            playerTurnId:action.payload
-        }
+    case SET_PLAYER_TURN:
+      return {
+        ...state,
+        playerTurnId: action.payload
+      };
 
-        case ADD_PLAYER_CARDS:
-        return{
+    case ADD_PLAYER_CARDS:
+      return {};
 
-        }
-
-
-        case SUBSTRACT_PLAYER_CARDS:
-        let playersList = [...state.players];
-        var playerToEdit = playersList.find(x=>x.id===state.playerTurnId)
-        playerToEdit.grain-=1;
-        playerToEdit.lumber-=1;
-        playerToEdit.wool-=1;
-        playerToEdit.brick-=1;
-        return Object.assign({}, state, {
-            players:playersList
-        });
-
-
+    case SUBSTRACT_PLAYER_CARDS:
+      let playersList = [...state.players];
+      var playerToEdit = playersList.find(x => x.id === state.playerTurnId);
+      playerToEdit.grain -= 1;
+      playerToEdit.lumber -= 1;
+      playerToEdit.wool -= 1;
+      playerToEdit.brick -= 1;
+      return Object.assign({}, state, {
+        players: playersList
+      });
 
     default:
       return state;
-
   }
 };
 

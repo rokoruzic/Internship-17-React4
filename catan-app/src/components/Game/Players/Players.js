@@ -7,7 +7,8 @@ import {
   addPlayer,
   editPlayerPoints,
   setPlayerTurn,
-  substractPlayerCards
+  substractPlayerCards,
+  editPlayerTurn
 } from "./../../../redux/modules/player";
 const colors = ["red", "blue", "green", "pink"];
 
@@ -35,7 +36,9 @@ class Players extends React.Component {
       brick: 0,
       lumber: 0,
       wool: 0,
-      grain: 0
+      grain: 0,
+      turn:0,
+      firstClick:false
     };
     this.setState({ players: this.state.players.concat(newPlayer) });
     addPlayer(newPlayer);
@@ -49,14 +52,17 @@ class Players extends React.Component {
       ...state,
       players: state.players.sort(function(a, b) {
         return a.id - b.id;
-      })
+      }),
     }));
+    var player1 = this.state.players[0].turn=1;
 
     setPlayerTurn(this.state.players[0].id);
   };
   handleCounter = async () => {
     const { setPlayerTurn } = this.props;
     const { editPlayerPoints } = this.props;
+    const { editPlayerTurn } = this.props;
+
 
     var numberOfClicksOfOneTurn = this.state.players.length - 1;
     if (
@@ -91,6 +97,8 @@ class Players extends React.Component {
 
     setPlayerTurn(this.state.players[this.state.counter].id);
 
+
+    await editPlayerTurn();
     editPlayerPoints(3);
   };
 
@@ -133,7 +141,8 @@ const mapDispatchToProps = {
   addPlayer,
   editPlayerPoints,
   setPlayerTurn,
-  substractPlayerCards
+  substractPlayerCards,
+  editPlayerTurn
 };
 const mapStateToProps = state => ({
   players: state.player.players

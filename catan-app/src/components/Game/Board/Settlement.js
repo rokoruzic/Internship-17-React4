@@ -1,11 +1,13 @@
 import React from "react";
 import "./Board.css";
+import store from  "./../../../redux/index"
 import {
   addPlayer,
   editPlayerPoints,
   setPlayerTurn,
   substractPlayerCards,
-  editPlayerFirstClick
+  editPlayerFirstClick,
+  editPlayerSecondClick
 } from "./../../../redux/modules/player";
 import { connect } from "react-redux";
 import {
@@ -29,6 +31,8 @@ class Settlement extends React.Component {
     const { createFirstSettlement } = this.props;
     const { settlements } = this.props;
     const {editPlayerFirstClick} = this.props;
+    const {editPlayerSecondClick} = this.props;
+
 
     var cost = {};
     // if(this.state.isVillage)
@@ -44,7 +48,6 @@ class Settlement extends React.Component {
       color: currentPlayer.color,
       playerTurn: currentPlayer.turn
     };
-    createFirstSettlement(settlement);
 
     var findSettlement = settlements.some(
       settlement =>
@@ -54,16 +57,56 @@ class Settlement extends React.Component {
    
     
     if(!currentPlayer.firstClick)
+    
     {
-        await this.setState({
-            color: currentPlayer.color
-          });
-        editPlayerFirstClick();
+        console.log("prvi klik")
+    createFirstSettlement(settlement);
+    var filteredSettlements2 = store.getState().game.settlements.filter(  function(settlement) {
+        return settlement.playerId === currentPlayer.id;
+    });
+    console.log(filteredSettlements2);
 
+
+    if(filteredSettlements2.length===1)
+    {
+    editPlayerFirstClick();
+
+    this.setState({
+        color: currentPlayer.color
+      });
     }
 
 
-    if (findSettlement )
+        
+    }
+    
+    console.log(currentPlayer)
+
+    if(currentPlayer.firstClick && !currentPlayer.secondClick && currentPlayer.turn===2)
+    {
+        console.log("drugi klik")
+    createFirstSettlement(settlement);
+    var filteredSettlements = store.getState().game.settlements.filter(  function(settlement) {
+        return settlement.playerId === currentPlayer.id;
+    });
+    console.log(filteredSettlements);
+
+
+    if(filteredSettlements.length===2)
+    {
+    editPlayerSecondClick();
+
+    this.setState({
+        color: currentPlayer.color
+      });
+    }
+
+
+    }
+
+   
+
+    if (findSettlement && !currentPlayer.secondClick )
       this.setState({
         color: currentPlayer.color
       });
@@ -85,7 +128,8 @@ class Settlement extends React.Component {
 const mapDispatchToProps = {
   substractPlayerCards,
   createFirstSettlement,
-  editPlayerFirstClick
+  editPlayerFirstClick,
+  editPlayerSecondClick
 };
 const mapStateToProps = state => ({
   currentId: state.player.playerTurnId,

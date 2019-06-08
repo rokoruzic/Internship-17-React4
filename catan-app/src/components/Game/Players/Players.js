@@ -39,7 +39,9 @@ class Players extends React.Component {
       grain: 0,
       turn:0,
       firstClick:false,
-      firstClickRoad:false
+      firstClickRoad:false,
+      secondClick:false,
+      secondClickRoad:false
     };
     this.setState({ players: this.state.players.concat(newPlayer) });
     addPlayer(newPlayer);

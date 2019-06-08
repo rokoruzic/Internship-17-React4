@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import {
   createFirstSettlement,
   createSecondSettlement
-} from "./../../../redux/modules/settlement";
+} from "./../../../redux/modules/game";
 
 class Settlement extends React.Component {
   constructor(props) {
@@ -99,7 +99,7 @@ const mapDispatchToProps = {
 const mapStateToProps = state => ({
   currentId: state.player.playerTurnId,
   players: state.player.players,
-  settlements: state.settlement.settlements
+  settlements: state.game.settlements
 });
 
 export default connect(

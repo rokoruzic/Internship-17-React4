@@ -4,7 +4,7 @@ import RoadCoords from "./../../../constants/RoadCoords";
 import "./Board.css";
 import Settlement from "./Settlement";
 import Road from "./Road";
-import { incrementId, addRoad } from "../../../redux/modules/road";
+import { incrementId, addRoad } from "../../../redux/modules/game";
 
 class Field extends React.Component {
   constructor(props) {
@@ -90,7 +90,7 @@ class Field extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  color: state.road.color
+  color: state.game.color
 });
 
 const mapDispatchToProps = {

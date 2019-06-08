@@ -37,11 +37,11 @@ class Players extends React.Component {
       lumber: 0,
       wool: 0,
       grain: 0,
-      turn:0,
-      firstClick:false,
-      firstClickRoad:false,
-      secondClick:false,
-      secondClickRoad:false
+      turn: 0,
+      firstClick: false,
+      firstClickRoad: false,
+      secondClick: false,
+      secondClickRoad: false
     };
     this.setState({ players: this.state.players.concat(newPlayer) });
     addPlayer(newPlayer);
@@ -55,9 +55,9 @@ class Players extends React.Component {
       ...state,
       players: state.players.sort(function(a, b) {
         return a.id - b.id;
-      }),
+      })
     }));
-    var player1 = this.state.players[0].turn=1;
+    var player1 = (this.state.players[0].turn = 1);
 
     setPlayerTurn(this.state.players[0].id);
   };
@@ -65,7 +65,6 @@ class Players extends React.Component {
     const { setPlayerTurn } = this.props;
     const { editPlayerPoints } = this.props;
     const { editPlayerTurn } = this.props;
-
 
     var numberOfClicksOfOneTurn = this.state.players.length - 1;
     if (
@@ -99,7 +98,6 @@ class Players extends React.Component {
     else await this.setState({ counter: this.state.counter + 1 });
 
     setPlayerTurn(this.state.players[this.state.counter].id);
-
 
     await editPlayerTurn();
     editPlayerPoints(3);

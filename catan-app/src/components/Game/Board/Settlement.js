@@ -1,6 +1,6 @@
 import React from "react";
 import "./Board.css";
-import store from  "./../../../redux/index"
+import store from "./../../../redux/index";
 import {
   addPlayer,
   editPlayerPoints,
@@ -22,7 +22,7 @@ class Settlement extends React.Component {
     this.state = {
       isVillage: false,
       color: "pink",
-      isFirstClick:true
+      isFirstClick: true
     };
   }
 
@@ -30,9 +30,8 @@ class Settlement extends React.Component {
     const { substractPlayerCards } = this.props;
     const { createFirstSettlement } = this.props;
     const { settlements } = this.props;
-    const {editPlayerFirstClick} = this.props;
-    const {editPlayerSecondClick} = this.props;
-
+    const { editPlayerFirstClick } = this.props;
+    const { editPlayerSecondClick } = this.props;
 
     var cost = {};
     // if(this.state.isVillage)
@@ -54,64 +53,52 @@ class Settlement extends React.Component {
         settlement.id === this.props.id &&
         settlement.fieldId === this.props.fieldId
     );
-   
-    
-    if(!currentPlayer.firstClick)
-    
-    {
-        console.log("prvi klik")
-    createFirstSettlement(settlement);
-    var filteredSettlements2 = store.getState().game.settlements.filter(  function(settlement) {
-        return settlement.playerId === currentPlayer.id;
-    });
-    console.log(filteredSettlements2);
 
+    if (!currentPlayer.firstClick) {
+      createFirstSettlement(settlement);
+      var filteredSettlements2 = store
+        .getState()
+        .game.settlements.filter(function(settlement) {
+          return settlement.playerId === currentPlayer.id;
+        });
 
-    if(filteredSettlements2.length===1)
-    {
-    editPlayerFirstClick();
+      if (filteredSettlements2.length === 1) {
+        editPlayerFirstClick();
 
-    this.setState({
-        color: currentPlayer.color
-      });
+        this.setState({
+          color: currentPlayer.color
+        });
+      }
     }
 
+    console.log(currentPlayer);
 
-        
-    }
-    
-    console.log(currentPlayer)
+    if (
+      currentPlayer.firstClick &&
+      !currentPlayer.secondClick &&
+      currentPlayer.turn === 2
+    ) {
+      createFirstSettlement(settlement);
+      var filteredSettlements = store
+        .getState()
+        .game.settlements.filter(function(settlement) {
+          return settlement.playerId === currentPlayer.id;
+        });
+      console.log(filteredSettlements);
 
-    if(currentPlayer.firstClick && !currentPlayer.secondClick && currentPlayer.turn===2)
-    {
-        console.log("drugi klik")
-    createFirstSettlement(settlement);
-    var filteredSettlements = store.getState().game.settlements.filter(  function(settlement) {
-        return settlement.playerId === currentPlayer.id;
-    });
-    console.log(filteredSettlements);
+      if (filteredSettlements.length === 2) {
+        editPlayerSecondClick();
 
-
-    if(filteredSettlements.length===2)
-    {
-    editPlayerSecondClick();
-
-    this.setState({
-        color: currentPlayer.color
-      });
-    }
-
-
+        this.setState({
+          color: currentPlayer.color
+        });
+      }
     }
 
-   
-
-    if (findSettlement && !currentPlayer.secondClick )
+    if (findSettlement && !currentPlayer.secondClick)
       this.setState({
         color: currentPlayer.color
       });
-
-   
   };
 
   render() {

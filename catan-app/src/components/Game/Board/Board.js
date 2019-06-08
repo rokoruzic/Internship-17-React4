@@ -15,7 +15,6 @@ class Board extends React.Component {
     });
     var emptyField = {number:0,type:"white"};
     shuffledBoard.push(emptyField);
-    console.log(shuffledBoard);
     shuffle(shuffledBoard);
      shuffledBoard = shuffledBoard.map((obj, i) => {
       var rObj = {id:i, number: obj.number, type: obj.type };
@@ -36,6 +35,7 @@ class Board extends React.Component {
         <Field
           key={index}
           id={index}
+          type={item.type}
           style={{ borderBottomColor: item.type }}
           number={item.number}
           style2={{ backgroundColor: item.type }}
@@ -48,6 +48,8 @@ class Board extends React.Component {
         <Field
           key={index}
           id={index+3}
+          type={item.type}
+
 
           style={{ borderBottomColor: item.type }}
           number={item.number}
@@ -61,6 +63,7 @@ class Board extends React.Component {
         <Field
           key={index}
           id={index+7}
+          type={item.type}
 
           style={{ borderBottomColor: item.type }}
           number={item.number}
@@ -74,6 +77,7 @@ class Board extends React.Component {
         <Field
           key={index}
           id={index+12}
+          type={item.type}
 
           style={{ borderBottomColor: item.type }}
           number={item.number}
@@ -87,6 +91,8 @@ class Board extends React.Component {
         <Field
           key={index}
           id={index+16}
+          type={item.type}
+
           style={{ borderBottomColor: item.type }}
           number={item.number}
           style2={{ backgroundColor: item.type }}

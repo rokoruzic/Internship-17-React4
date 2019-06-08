@@ -4,19 +4,21 @@ import RoadCoords from "./../../../constants/RoadCoords";
 import "./Board.css";
 import Settlement from "./Settlement";
 import Road from "./Road";
-import { incrementId, addRoad } from "../../../redux/modules/game";
+import { incrementId, addRoad,addFields } from "../../../redux/modules/game";
 
 class Field extends React.Component {
   constructor(props) {
     super(props);
     this.state = { colour: "black" };
   }
-  handleClickRoad = e => {
-    console.log(this.props.id);
-    console.log(RoadCoords[this.props.id]);
-    this.setState({ colour: this.props.color });
-  };
+  
+componentDidMount (){
+const {addFields}=this.props;
+var fieldToAdd = {fieldId: this.props.id,number:this.props.number,type:this.props.type};
+addFields(fieldToAdd);
 
+
+}
   render() {
     return (
       <div>
@@ -90,12 +92,13 @@ class Field extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  color: state.game.color
+  color: state.game.color,
 });
 
 const mapDispatchToProps = {
   handleClick: incrementId,
-  handleRoadClick: addRoad
+  handleRoadClick: addRoad,
+  addFields: addFields
 };
 
 export default connect(

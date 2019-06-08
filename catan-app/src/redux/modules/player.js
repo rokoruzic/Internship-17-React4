@@ -12,7 +12,6 @@ const EDIT_PLAYER_FIRST_CLICK_ROAD = "EDIT_PLAYER_FIRST_CLICK_ROAD";
 const EDIT_PLAYER_SECOND_CLICK = "EDIT_PLAYER_SECOND_CLICK";
 const EDIT_PLAYER_SECOND_CLICK_ROAD = "EDIT_PLAYER_SECOND_CLICK_ROAD";
 
-
 // initial state
 const initialState = {
   players: [],
@@ -94,41 +93,45 @@ const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         players: players
       });
-      case EDIT_PLAYER_FIRST_CLICK:
+    case EDIT_PLAYER_FIRST_CLICK:
       let playersFirstClick = [...state.players];
-      var playerFirstClickToEdit = playersFirstClick.find(x => x.id === state.playerTurnId);
-      playerFirstClickToEdit.firstClick=true
+      var playerFirstClickToEdit = playersFirstClick.find(
+        x => x.id === state.playerTurnId
+      );
+      playerFirstClickToEdit.firstClick = true;
       return Object.assign({}, state, {
         players: playersFirstClick
       });
 
-     case EDIT_PLAYER_FIRST_CLICK_ROAD:
-     let playersFirstClickRoad = [...state.players];
-     var playerFirstClickRoadToEdit = playersFirstClickRoad.find(x=>x.id===state.playerTurnId);
-     playerFirstClickRoadToEdit.firstClickRoad = true;
-     return Object.assign({}, state, {
-      players: playersFirstClickRoad
-    });
+    case EDIT_PLAYER_FIRST_CLICK_ROAD:
+      let playersFirstClickRoad = [...state.players];
+      var playerFirstClickRoadToEdit = playersFirstClickRoad.find(
+        x => x.id === state.playerTurnId
+      );
+      playerFirstClickRoadToEdit.firstClickRoad = true;
+      return Object.assign({}, state, {
+        players: playersFirstClickRoad
+      });
 
     case EDIT_PLAYER_SECOND_CLICK:
-    let allPlayers = [...state.players];
-    var playerSecondClickToEdit = allPlayers.find(x=>x.id===state.playerTurnId);
-    playerSecondClickToEdit.secondClick = true
-    return Object.assign({}, state, {
-      players: allPlayers
-    });
+      let allPlayers = [...state.players];
+      var playerSecondClickToEdit = allPlayers.find(
+        x => x.id === state.playerTurnId
+      );
+      playerSecondClickToEdit.secondClick = true;
+      return Object.assign({}, state, {
+        players: allPlayers
+      });
 
     case EDIT_PLAYER_SECOND_CLICK_ROAD:
-    let allPlayers2 = [...state.players];
-    var playerSecondClickRoadToEdit = allPlayers2.find(x=>x.id===state.playerTurnId);
-    playerSecondClickRoadToEdit.secondClickRoad = true
-    return Object.assign({}, state, {
-      players: allPlayers2
-    });
-
-
-
-
+      let allPlayers2 = [...state.players];
+      var playerSecondClickRoadToEdit = allPlayers2.find(
+        x => x.id === state.playerTurnId
+      );
+      playerSecondClickRoadToEdit.secondClickRoad = true;
+      return Object.assign({}, state, {
+        players: allPlayers2
+      });
 
     case EDIT_PLAYER_TURN:
       let playersList1 = [...state.players];

@@ -205,13 +205,12 @@ export const addRoad = road => dispatch => {
       neighbourRoads.push(settlementTwoSubstitutionsRoad1);
       neighbourRoads.push(settlementTwoSubstitutionsRoad2);
 
-      console.log(neighbourRoads);
-    }
+     }
   }
-
+  alert("asdasd")
+  console.log(road)
   dispatch({
-    type: ADD_ROAD,
-    road
+    type: ADD_ROAD, road
   });
 };
 export const incrementId = () => {
@@ -322,12 +321,32 @@ const reducer = (state = initialState, action) => {
       allSubsSets.push(subNeighbour1);
       allSubsSets.push(subNeighbour2);
       allSubsSets.push(neighbourSettlement1);
-      allSubsSets.push(SettlementCoords[neighbourSettlement1.fieldId][neighbourSettlement1.settlementId][0])
-      allSubsSets.push(SettlementCoords[neighbourSettlement1.fieldId][neighbourSettlement1.settlementId][1])
+      var subNeighbour4 = SettlementCoords[neighbourSettlement1.fieldId][neighbourSettlement1.settlementId];
+      var subNeighbour5 = SettlementCoords[neighbourSettlement2.fieldId][neighbourSettlement2.settlementId];
+
+      if(subNeighbour4)
+      {
+          if(subNeighbour4.length===1)
+      allSubsSets.push(subNeighbour4[0])
+
+      if(subNeighbour2.length>1)
+      allSubsSets.push(subNeighbour4[1])
+
+      }
+
+      if(subNeighbour5)
+      {
+          if(subNeighbour5.length===1)
+      allSubsSets.push(subNeighbour5[0])
+
+      if(subNeighbour5.length>1)
+      allSubsSets.push(subNeighbour5[1])
+
+      }
+
 
       allSubsSets.push(neighbourSettlement2);
-      allSubsSets.push(SettlementCoords[neighbourSettlement2.fieldId][neighbourSettlement2.settlementId][0])
-      allSubsSets.push(SettlementCoords[neighbourSettlement2.fieldId][neighbourSettlement2.settlementId][1])
+
 
 
 
@@ -690,19 +709,23 @@ const reducer = (state = initialState, action) => {
       var newArraySub = [];
       newArray.forEach((item)=>
         newArraySub.push(SettlementCoords[item.fieldId][item.id]) );
-      console.log(newArray);
-      console.log(newArraySub)
-
-      console.log(newArraySub[0][1])
-
-
-      var newSettlement = newArraySub[0][0];
-      var newSettlement2 = newArraySub[0][1];
 
 
 
-      var oldSettlement = newArray[0];
-      console.log(oldSettlement)
+      var allRoads = [];
+      var newSettlement = {};
+      var newSettlement2={};
+      var oldSettlement={};
+
+      if(newArraySub[0])
+      {
+      
+       newSettlement = newArraySub[0][0];
+       if(newArraySub[0].length===2)
+       newSettlement2 = newArraySub[0][1];
+
+
+
 
 
 
@@ -720,30 +743,36 @@ const reducer = (state = initialState, action) => {
     newSettlement2Road1 = {fieldId:newSettlement2.fieldId,roadId:5}
 
 
+
+
+      
+    allRoads.push(newSettlementRoad1);      
+    allRoads.push(newSettlementRoad2);      
+    allRoads.push(newSettlement2Road1);      
+    allRoads.push(newSettlement2Road2); 
+      }
+
+
+      if(newArray[0])
+      {
+    oldSettlement = newArray[0];
+
     var oldSettlementRoad1 = {fieldId:oldSettlement.fieldId,roadId:oldSettlement.id-1}
       var oldSettlementRoad2 = {fieldId:oldSettlement.fieldId,roadId:oldSettlement.id}
 
     if(oldSettlement.settlementId===0)
     oldSettlementRoad1 = {fieldId:oldSettlement.fieldId,roadId:5}
-
-    // console.log(oldSettlementRoad1);
-    // console.log(oldSettlementRoad2);
-    // console.log(newSettlementRoad1);
-    // console.log(newSettlementRoad2);
-    // console.log(newSettlement2Road2);
-    // console.log(newSettlement2Road2);
-
-
-
-
-    var allRoads = [];
     allRoads.push(oldSettlementRoad1);
     allRoads.push(oldSettlementRoad2);
-    allRoads.push(newSettlementRoad1);      
-    allRoads.push(newSettlementRoad2);      
-    allRoads.push(newSettlement2Road1);      
-    allRoads.push(newSettlement2Road2);     
-    console.log(allRoads)
+
+
+      }
+
+  
+
+
+
+      
     
     allRoads.forEach((item)=>
     {
@@ -757,7 +786,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         message:"road not near settlement"
     }
-
+    
 
 
 
@@ -1063,8 +1092,9 @@ const reducer = (state = initialState, action) => {
         fieldId: state.fieldId + 1
       };
     case ADD_ROAD:
+    console.log(action)
       return Object.assign({}, state, {
-        roads: state.roads.concat(action.payload)
+        roads: state.roads.concat(action.road)
       });
 
     case CREATE_ROAD:

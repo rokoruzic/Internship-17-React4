@@ -8,6 +8,8 @@ const SUBSTRACT_PLAYER_CARDS = "SUBSTRACT_PLAYER_CARDS";
 const ADD_PLAYER_CARDS = "ADD_PLAYER_CARDS";
 const EDIT_PLAYER_TURN = "EDIT_PLAYER_TURN";
 const EDIT_PLAYER_FIRST_CLICK = "EDIT_PLAYER_FIRST_CLICK";
+const EDIT_PLAYER_FIRST_CLICK_ROAD = "EDIT_PLAYER_FIRST_CLICK_ROAD";
+
 
 // initial state
 const initialState = {
@@ -32,6 +34,11 @@ export const editPlayerTurn = () => dispatch => {
 export const editPlayerFirstClick = () => dispatch => {
   dispatch({
     type: EDIT_PLAYER_FIRST_CLICK
+  });
+};
+export const editPlayerFirstClickRoad = () => dispatch => {
+  dispatch({
+    type: EDIT_PLAYER_FIRST_CLICK_ROAD
   });
 };
 export const addPlayer = payload => dispatch => {
@@ -82,6 +89,15 @@ const reducer = (state = initialState, action) => {
       return Object.assign({}, state, {
         players: playersFirstClick
       });
+
+     case EDIT_PLAYER_FIRST_CLICK_ROAD:
+     let playersFirstClickRoad = [...state.players];
+     var playerFirstClickRoadToEdit = playersFirstClickRoad.find(x=>x.id===state.playerTurnId);
+     playerFirstClickRoadToEdit.firstClickRoad = true;
+     return Object.assign({}, state, {
+      players: playersFirstClickRoad
+    });
+
 
     case EDIT_PLAYER_TURN:
       let playersList1 = [...state.players];

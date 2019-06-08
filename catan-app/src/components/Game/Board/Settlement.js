@@ -51,16 +51,7 @@ class Settlement extends React.Component {
         settlement.id === this.props.id &&
         settlement.fieldId === this.props.fieldId
     );
-    // if(currentPlayer.turn<=1 && this.state.isFirstClick )
-    // {
-    //    await this.setState({
-    //         isFirstClick:false
-    //       });
-    //       await this.setState({
-    //         color:currentPlayer.color
-    //       });
-    // }
-    console.log(currentPlayer.firstClick)
+   
     
     if(!currentPlayer.firstClick)
     {
@@ -77,7 +68,7 @@ class Settlement extends React.Component {
         color: currentPlayer.color
       });
 
-    // await this.setState({isVillage:true})
+   
   };
 
   render() {

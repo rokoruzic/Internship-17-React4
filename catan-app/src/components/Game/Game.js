@@ -2,6 +2,7 @@ import React from "react";
 import Players from "./Players/Players";
 import Dice from "./Dice/Dice";
 import Board from "./Board/Board";
+import PlayerList from "./../Game/Players/PlayerList"
 class Game extends  React.Component{
     constructor(props){
         super(props)
@@ -12,6 +13,7 @@ class Game extends  React.Component{
                 <Players/>
                 <Dice/>
                 <Board/>
+                <PlayerList/>
             </div>
         )
     }

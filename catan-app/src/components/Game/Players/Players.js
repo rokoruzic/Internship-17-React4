@@ -36,6 +36,7 @@ class Players extends React.Component {
       brick: 0,
       lumber: 0,
       wool: 0,
+      rock:0,
       grain: 0,
       turn: 0,
       firstClick: false,
@@ -100,7 +101,6 @@ class Players extends React.Component {
     setPlayerTurn(this.state.players[this.state.counter].id);
 
     await editPlayerTurn();
-    editPlayerPoints(3);
   };
 
   render() {

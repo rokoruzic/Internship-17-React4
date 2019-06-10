@@ -13,17 +13,14 @@ class Board extends React.Component {
       var rObj = { number: obj, type: FieldTypes[i] };
       return rObj;
     });
-    var emptyField = {number:0,type:"white"};
+    var emptyField = { number: 0, type: "white" };
     shuffledBoard.push(emptyField);
     shuffle(shuffledBoard);
-     shuffledBoard = shuffledBoard.map((obj, i) => {
-      var rObj = {id:i, number: obj.number, type: obj.type };
+    shuffledBoard = shuffledBoard.map((obj, i) => {
+      var rObj = { id: i, number: obj.number, type: obj.type };
       return rObj;
     });
-   
 
-   
-   
     var shuffledBoardPart1 = shuffledBoard.slice(0, 3);
     var shuffledBoardPart2 = shuffledBoard.slice(3, 7);
     var shuffledBoardPart3 = shuffledBoard.slice(7, 12);
@@ -47,10 +44,8 @@ class Board extends React.Component {
       return (
         <Field
           key={index}
-          id={index+3}
+          id={index + 3}
           type={item.type}
-
-
           style={{ borderBottomColor: item.type }}
           number={item.number}
           style2={{ backgroundColor: item.type }}
@@ -62,9 +57,8 @@ class Board extends React.Component {
       return (
         <Field
           key={index}
-          id={index+7}
+          id={index + 7}
           type={item.type}
-
           style={{ borderBottomColor: item.type }}
           number={item.number}
           style2={{ backgroundColor: item.type }}
@@ -76,9 +70,8 @@ class Board extends React.Component {
       return (
         <Field
           key={index}
-          id={index+12}
+          id={index + 12}
           type={item.type}
-
           style={{ borderBottomColor: item.type }}
           number={item.number}
           style2={{ backgroundColor: item.type }}
@@ -90,9 +83,8 @@ class Board extends React.Component {
       return (
         <Field
           key={index}
-          id={index+16}
+          id={index + 16}
           type={item.type}
-
           style={{ borderBottomColor: item.type }}
           number={item.number}
           style2={{ backgroundColor: item.type }}
@@ -100,7 +92,6 @@ class Board extends React.Component {
         />
       );
     });
-    
 
     return (
       <div className="wrapper">

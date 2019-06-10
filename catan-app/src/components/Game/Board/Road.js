@@ -1,4 +1,5 @@
 import React from "react";
+import {addRoad,addFirstRoad,createRoad} from "../../../redux/modules/road"
 import "./Board.css";
 import RoadCoords from "./../../../constants/RoadCoords";
 import {
@@ -9,8 +10,6 @@ import {
   editPlayerFirstClickRoad,
   editPlayerSecondClickRoad
 } from "./../../../redux/modules/player";
-import { addRoad } from "../../../redux/modules/game";
-import { createRoad, addFirstRoad } from "../../../redux/modules/game";
 import { connect } from "react-redux";
 import store from "./../../../redux/index";
 
@@ -23,11 +22,11 @@ class Road extends React.Component {
     };
   }
   handleClick = async () => {
-    const { addRoad } = this.props;
-    const { createRoad } = this.props;
     const { addFirstRoad } = this.props;
     const { editPlayerFirstClickRoad } = this.props;
     const { editPlayerSecondClickRoad } = this.props;
+    const { addRoad } = this.props;
+
 
     const { roads } = this.props;
 
@@ -42,12 +41,12 @@ class Road extends React.Component {
       turn: currentPlayer.turn
     };
 
-    var findRoad = roads.some(
-      road =>
-        road.id === this.props.id &&
-        road.fieldId === this.props.fieldId &&
-        road.playerId === this.props.currentPlayerId
-    );
+    // var findRoad = roads.some(
+    //   road =>
+    //     road.id === this.props.id &&
+    //     road.fieldId === this.props.fieldId &&
+    //     road.playerId === this.props.currentPlayerId
+    // );
 
     if (!currentPlayer.firstClickRoad) {
       addFirstRoad(roadToCreate);
@@ -80,16 +79,23 @@ class Road extends React.Component {
         this.setState({
           color: currentPlayer.color
         });
-      }
+      } 
 
-      if (findRoad && !currentPlayer.secondClickRoad) {
-        this.setState({
-          color: currentPlayer.color
-        });
-      }
-
-      console.log(currentPlayer);
+      // if (findRoad && !currentPlayer.secondClickRoad) {
+      //   this.setState({
+      //     color: currentPlayer.color
+      //   });
+      // }
     }
+    if(currentPlayer.firstClickRoad && currentPlayer.secondClickRoad && currentPlayer.turn>2)
+    {
+      console.log("lolara")
+      addRoad(roadToCreate);
+      this.setState({
+        color: currentPlayer.color
+      });
+    }
+
   };
 
   render() {
@@ -103,11 +109,11 @@ class Road extends React.Component {
   }
 }
 const mapDispatchToProps = {
-  addRoad,
   createRoad,
   addFirstRoad,
   editPlayerFirstClickRoad,
-  editPlayerSecondClickRoad
+  editPlayerSecondClickRoad,
+  addRoad
 };
 const mapStateToProps = state => ({
   roads: state.game.roads,

@@ -2,6 +2,7 @@ import RoadCoords from "./../../constants/RoadCoords";
 import SettlementCoords from "./../../constants/SettlementCoords";
 import { init } from "events";
 import { newExpression } from "@babel/types";
+import Road from "../../components/Game/Board/Road";
 // action types
 const ADD_PLAYER = "ADD_PLAYER";
 const EDIT_PLAYER_POINTS = "EDIT_PLAYER_POINTS";
@@ -18,7 +19,7 @@ const CHECK_ROAD_CONNECTION = "CHECK_ROAD_CONNECTION";
 const CREATE_ROAD = "CREATE_ROAD";
 const ADD_FIRST_ROAD = "ADD_FIRST_ROAD";
 const ADD_FIELDS = "ADD_FIELDS";
-const THROW_DICE= "THROW_DICE";
+const THROW_DICE = "THROW_DICE";
 
 // initial state
 const initialState = {
@@ -27,34 +28,34 @@ const initialState = {
   roads: [],
   settlements: [],
   message: "",
-  fields:[],
-  dice:0
+  fields: [],
+  dice: 0
 };
 
 // action creators
-export const throwDice = payload=>dispatch=>{
-    dispatch({
-        type:THROW_DICE,
-        payload
-    })
-}
+export const throwDice = payload => dispatch => {
+  dispatch({
+    type: THROW_DICE,
+    payload
+  });
+};
 export const createFirstSettlement = payload => dispatch => {
   dispatch({
     type: CREATE_FIRST_SETTLEMENT,
     payload
   });
-
 };
 export const applyRoad = () => {
   return {
     type: APPLY_ROAD
   };
 };
-export const addFields=payload=>dispatch=>{
-    dispatch({
-        type:ADD_FIELDS,payload
-    });
-}
+export const addFields = payload => dispatch => {
+  dispatch({
+    type: ADD_FIELDS,
+    payload
+  });
+};
 export const createRoad = payload => dispatch => {
   dispatch({
     type: CREATE_ROAD,
@@ -215,7 +216,6 @@ export const addRoad = road => dispatch => {
       neighbourRoads.push(settlementTwoSubstitutionsRoad1);
       neighbourRoads.push(settlementTwoSubstitutionsRoad2);
     }
-
   }
 
   console.log(neighbourRoads);
@@ -240,15 +240,14 @@ export const showError = message => {
 // reducer
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-     case THROW_DICE:
-     return Object.assign({},state,{
-         dice:action.payload
-     })
-      case ADD_FIELDS:
+    case THROW_DICE:
+      return Object.assign({}, state, {
+        dice: action.payload
+      });
+    case ADD_FIELDS:
       return Object.assign({}, state, {
         fields: state.fields.concat(action.payload)
       });
-    
 
     case CREATE_FIRST_SETTLEMENT:
       var subSettlements =
@@ -375,8 +374,7 @@ const reducer = (state = initialState, action) => {
             item.settlementId === item2.id
           ) {
             checkNearbySettlements = true;
-          } 
-          
+          }
         });
       });
 
@@ -409,11 +407,8 @@ const reducer = (state = initialState, action) => {
             return Object.assign({}, state, {
               settlements: state.settlements.concat(action.payload)
             });
-        } 
-        else if(action.payload.playerTurn>2){
-
-        }
-        else {
+        } else if (action.payload.playerTurn > 2) {
+        } else {
           return Object.assign({}, state, {
             settlements: state.settlements.concat(action.payload)
           });
@@ -518,9 +513,7 @@ const reducer = (state = initialState, action) => {
         allRoads.push(oldSettlementRoad2);
         allRoads.push(secondSettlementRoad1);
         allRoads.push(secondSettlementRoad2);
-        console.log(oldSettlementRoad2);
       }
-
       var isRoadLegit = false;
       allRoads.forEach(item => {
         if (item.fieldId === road.fieldId && item.roadId === road.id) {
@@ -585,32 +578,94 @@ const reducer = (state = initialState, action) => {
           message: "It is already a road"
         };
 
-      if (action.road.turn === 2) {
-        var filteredRoads = state.roads.filter(function(road) {
-          return road.playerId === action.road.playerId;
-        });
-        if (filteredRoads.length > 1) {
-          return {
-            ...state,
-            message: "you cant make more roads on first 2 turns"
+      var substituteRoad = RoadCoords[action.road.fieldId][action.road.id];
+      var roadsToCheck = [];
+
+      if (substituteRoad) {
+        var substituteRoadNeighbour1 = {
+          fieldId: substituteRoad.fieldId,
+          roadId: substituteRoad.roadId - 1
+        };
+        var substituteRoadNeighbour2 = {
+          fieldId: substituteRoad.fieldId,
+          roadId: substituteRoad.roadId + 1
+        };
+
+        if (substituteRoad.roadId === 5)
+          substituteRoadNeighbour2 = {
+            fieldId: substituteRoad.fieldId,
+            roadId: 0
           };
-        } else
-          return Object.assign({}, state, {
-            roads: state.roads.concat(action.road)
-          });
+
+        if (substituteRoad.roadId === 0)
+          var substituteRoadNeighbour1 = {
+            fieldId: substituteRoad.fieldId,
+            roadId: 5
+          };
+
+        roadsToCheck.push(substituteRoadNeighbour1);
+        roadsToCheck.push(substituteRoadNeighbour2);
       }
 
-      if (action.road.turn < 2) {
-        if (state.roads.find(x => x.playerId === action.road.playerId))
-          return {
-            ...state,
-            message: "you cant make more roads on first turn"
-          };
-        else
-          return Object.assign({}, state, {
-            roads: state.roads.concat(action.road)
-          });
-      }
+      var neighbourRoad1 = {
+        fieldId: action.road.fieldId,
+        roadId: action.road.id - 1
+      };
+      var neighbourRoad2 = {
+        fieldId: action.road.fieldId,
+        roadId: action.road.id + 1
+      };
+
+      if (action.road.id === 5)
+        neighbourRoad2 = { fieldId: action.road.fieldId, roadId: 0 };
+
+      if (action.road.id === 0)
+        neighbourRoad1 = { fieldId: action.road.fieldId, roadId: 5 };
+      console.log(neighbourRoad1);
+      roadsToCheck.push(neighbourRoad1);
+      roadsToCheck.push(neighbourRoad2);
+
+      var substituteAllRoads = [];
+      state.roads.forEach(road => {
+        if (
+          !Object.getOwnPropertyNames(RoadCoords[road.fieldId][road.id])
+            .length === 0
+        )
+          substituteAllRoads.push(RoadCoords[road.fieldId][road.id]);
+      });
+
+      var checkIfThereIsNeighbourRoad = false;
+      console.log(substituteAllRoads);
+      substituteAllRoads.forEach(road => {
+        roadsToCheck.forEach(roadToCheck => {
+          if (
+            road.id === roadToCheck.roadId &&
+            road.fieldId === roadToCheck.fieldId
+          )
+            checkIfThereIsNeighbourRoad = true;
+        });
+      });
+
+      state.roads.forEach(road => {
+        roadsToCheck.forEach(roadToCheck => {
+          if (
+            road.id === roadToCheck.roadId &&
+            road.fieldId === roadToCheck.fieldId
+          )
+            checkIfThereIsNeighbourRoad = true;
+        });
+      });
+      console.log(checkIfThereIsNeighbourRoad);
+
+      if (checkIfThereIsNeighbourRoad)
+        return Object.assign({}, state, {
+          roads: state.roads.concat(action.road)
+        });
+      else
+        return {
+          ...state,
+          message: "no neighbour road"
+        };
 
     case CREATE_ROAD:
       return Object.assign({}, state, {

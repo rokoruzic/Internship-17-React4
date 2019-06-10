@@ -11,6 +11,7 @@ const EDIT_PLAYER_FIRST_CLICK = "EDIT_PLAYER_FIRST_CLICK";
 const EDIT_PLAYER_FIRST_CLICK_ROAD = "EDIT_PLAYER_FIRST_CLICK_ROAD";
 const EDIT_PLAYER_SECOND_CLICK = "EDIT_PLAYER_SECOND_CLICK";
 const EDIT_PLAYER_SECOND_CLICK_ROAD = "EDIT_PLAYER_SECOND_CLICK_ROAD";
+const UPDATE_PLAYERS = "UPDATE_PLAYERS";
 
 // initial state
 const initialState = {
@@ -23,6 +24,12 @@ const initialState = {
 export const setPlayerTurn = payload => dispatch => {
   dispatch({
     type: SET_PLAYER_TURN,
+    payload
+  });
+};
+export const updatePlayers = payload => dispatch => {
+  dispatch({
+    type: UPDATE_PLAYERS,
     payload
   });
 };
@@ -81,6 +88,11 @@ export const addPlayerCards = payload => dispatch => {
 // reducer
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case UPDATE_PLAYERS:
+    let updatedPlayers = [...state.players]
+    return Object.assign({}, state, {
+      players: updatedPlayers
+    });
     case ADD_PLAYER:
       return Object.assign({}, state, {
         players: state.players.concat(action.payload)

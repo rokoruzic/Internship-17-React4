@@ -10,7 +10,8 @@ import {
   setPlayerTurn,
   substractPlayerCards,
   editPlayerFirstClickRoad,
-  editPlayerSecondClickRoad
+  editPlayerSecondClickRoad,
+  buyRoad
 } from "../../../redux/modules/player";
 
 
@@ -26,6 +27,7 @@ class Road extends React.Component {
     const { createFirstRoad } = this.props;
     const { addRoad } = this.props;
     const {toggleRoadCreate} = this.props;
+    const {buyRoad}=this.props;
 
 
     const { editPlayerFirstClickRoad } = this.props;
@@ -97,13 +99,24 @@ class Road extends React.Component {
     }
     if(currentPlayer.firstClickRoad && currentPlayer.secondClickRoad && currentPlayer.turn>2)
     {
+
       toggleRoadCreate();
+      if(currentPlayer.brick>0 && currentPlayer.lumber>0)
+      {
       addRoad(roadToCreate);
+    
+
       if(store.getState().game.isRoadCreated)
+      {
+        buyRoad(currentPlayer);
       this.setState({
         color: currentPlayer.color
       });
+    }
       else alert("macka")
+  }
+  else alert("not enough resources")
+    
     }
 
   };
@@ -123,7 +136,8 @@ const mapDispatchToProps = {
   addRoad,
   editPlayerFirstClickRoad,
   editPlayerSecondClickRoad,
-  toggleRoadCreate
+  toggleRoadCreate,
+  buyRoad
 };
 const mapStateToProps = state => ({
   roads: state.game.roads,

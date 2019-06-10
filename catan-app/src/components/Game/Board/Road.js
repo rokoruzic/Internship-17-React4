@@ -1,7 +1,9 @@
 import React from "react";
-import {addRoad,addFirstRoad,createRoad} from "../../../redux/modules/road"
+import { connect } from "react-redux";
+import store from "../../../redux/index";
 import "./Board.css";
-import RoadCoords from "./../../../constants/RoadCoords";
+import {createFirstRoad,addRoad,toggleRoadCreate} from "./../../../redux/modules/game"
+import RoadCoords from "../../../constants/RoadCoords";
 import {
   addPlayer,
   editPlayerPoints,
@@ -9,9 +11,8 @@ import {
   substractPlayerCards,
   editPlayerFirstClickRoad,
   editPlayerSecondClickRoad
-} from "./../../../redux/modules/player";
-import { connect } from "react-redux";
-import store from "./../../../redux/index";
+} from "../../../redux/modules/player";
+
 
 class Road extends React.Component {
   constructor(props) {
@@ -21,11 +22,14 @@ class Road extends React.Component {
       color: "black"
     };
   }
-  handleClick = async () => {
-    const { addFirstRoad } = this.props;
+  handleClick =  async() => {
+    const { createFirstRoad } = this.props;
+    const { addRoad } = this.props;
+    const {toggleRoadCreate} = this.props;
+
+
     const { editPlayerFirstClickRoad } = this.props;
     const { editPlayerSecondClickRoad } = this.props;
-    const { addRoad } = this.props;
 
 
     const { roads } = this.props;
@@ -40,6 +44,9 @@ class Road extends React.Component {
       color: currentPlayer.color,
       turn: currentPlayer.turn
     };
+    console.log(createFirstRoad)
+
+
 
     // var findRoad = roads.some(
     //   road =>
@@ -49,7 +56,8 @@ class Road extends React.Component {
     // );
 
     if (!currentPlayer.firstClickRoad) {
-      addFirstRoad(roadToCreate);
+
+      createFirstRoad(roadToCreate);
       var filteredRoads2 = store.getState().game.roads.filter(function(road) {
         return road.playerId === currentPlayer.id;
       });
@@ -68,7 +76,7 @@ class Road extends React.Component {
       !currentPlayer.secondClickRoad &&
       currentPlayer.turn === 2
     ) {
-      addFirstRoad(roadToCreate);
+      createFirstRoad(roadToCreate);
       var filteredRoads = store.getState().game.roads.filter(function(road) {
         return road.playerId === currentPlayer.id;
       });
@@ -89,11 +97,13 @@ class Road extends React.Component {
     }
     if(currentPlayer.firstClickRoad && currentPlayer.secondClickRoad && currentPlayer.turn>2)
     {
-      console.log("lolara")
+      toggleRoadCreate();
       addRoad(roadToCreate);
+      if(store.getState().game.isRoadCreated)
       this.setState({
         color: currentPlayer.color
       });
+      else alert("macka")
     }
 
   };
@@ -109,16 +119,17 @@ class Road extends React.Component {
   }
 }
 const mapDispatchToProps = {
-  createRoad,
-  addFirstRoad,
+  createFirstRoad,
+  addRoad,
   editPlayerFirstClickRoad,
   editPlayerSecondClickRoad,
-  addRoad
+  toggleRoadCreate
 };
 const mapStateToProps = state => ({
   roads: state.game.roads,
   currentPlayerId: state.player.playerTurnId,
-  players: state.player.players
+  players: state.player.players,
+  isRoadCreated:state.game.isRoadCreated
 });
 
 export default connect(

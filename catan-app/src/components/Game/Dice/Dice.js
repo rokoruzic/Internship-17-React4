@@ -2,9 +2,10 @@ import React from "react";
 import RandomNumber from "./DiceRandomizer";
 import "./../Players/Players.css";
 import { connect } from "react-redux";
-import { throwDice } from "../../../redux/modules/game";
+import { throwDice,isDiceRolled } from "../../../redux/modules/game";
 import SettlementCoords from "../../../constants/SettlementCoords";
 import {updatePlayers} from "./../../../redux/modules/player"
+import store from "./../../../redux/index"
 
 class Dice extends React.Component {
   constructor(props) {
@@ -16,6 +17,8 @@ class Dice extends React.Component {
     var { settlements } = this.props;
     var { fields } = this.props;
     var {updatePlayers}= this.props;
+    var {isDiceRolled}=this.props;
+    isDiceRolled();
 
     var { throwDice } = this.props;
     await this.setState(state => ({
@@ -110,9 +113,19 @@ class Dice extends React.Component {
     updatePlayers(players);
   };
   render() {
+    var currentPlayer = store.getState().player.players.find(x=>x.id===this.props.playerTurnId);
+    console.log(currentPlayer);
+      if(currentPlayer)
+    var nextElement =  currentPlayer.turn>2 && !this.props.diceRolled? 
+    <button
+
+    onClick={this.handleClick}
+  >
+    ROLL
+  </button> : <div></div>
     return (
       <div>
-        <button onClick={this.handleClick}>ROLL</button>
+        {nextElement}
         {this.state.dice}{" "}
       </div>
     );
@@ -121,12 +134,15 @@ class Dice extends React.Component {
 const mapStateToProps = state => ({
   players: state.player.players,
   settlements: state.game.settlements,
-  fields: state.game.fields
+  fields: state.game.fields,
+  playerTurnId:state.player.playerTurnId,
+  diceRolled :state.game.isDiceRolled
 });
 
 const mapDispatchToProps = {
   throwDice,
-  updatePlayers
+  updatePlayers,
+  isDiceRolled
 };
 
 export default connect(

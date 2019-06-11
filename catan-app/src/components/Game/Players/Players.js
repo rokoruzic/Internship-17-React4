@@ -3,6 +3,7 @@ import "./Players.css";
 import Player from "./Player/Player";
 import PlayerInput from "./PlayerInput";
 import { connect } from "react-redux";
+import store from "./../../../redux/index";
 import {
   addPlayer,
   editPlayerPoints,
@@ -10,7 +11,8 @@ import {
   substractPlayerCards,
   editPlayerTurn
 } from "./../../../redux/modules/player";
-const colors = ["red", "blue", "green", "pink"];
+import {isDiceRolled,diceRollFalse,startGame} from "./../../../redux/modules/game"
+const colors = ["red", "blue", "purple", "pink"];
 
 class Players extends React.Component {
   constructor(props) {
@@ -27,12 +29,14 @@ class Players extends React.Component {
 
   handleClick = value => {
     const { addPlayer } = this.props;
+    const {isDiceRolled}=this.props;
+  
 
     var newPlayer = {
       name: value,
       id: Math.random(),
       color: colors[this.state.players.length],
-      points: 7,
+      points: 0,
       brick: 0,
       lumber: 0,
       wool: 0,
@@ -49,23 +53,27 @@ class Players extends React.Component {
   };
 
   handleStartPlaying = async () => {
-    this.setState({ startPlaying: true });
-    const { setPlayerTurn } = this.props;
+      this.setState({ startPlaying: true });
+      const { setPlayerTurn } = this.props;
+      const {startGame} = this.props
 
-    await this.setState(state => ({
-      ...state,
-      players: state.players.sort(function(a, b) {
-        return a.id - b.id;
-      })
-    }));
-    var player1 = (this.state.players[0].turn = 1);
+      await this.setState(state => ({
+        ...state,
+        players: state.players.sort(function(a, b) {
+          return a.id - b.id;
+        })
+      }));
+      var player1 = (this.state.players[0].turn = 1);
 
-    setPlayerTurn(this.state.players[0].id);
+      setPlayerTurn(this.state.players[0].id);
+      startGame();
   };
-  handleCounter = async () => {
+  handlePlayerTurn = async () => {
     const { setPlayerTurn } = this.props;
     const { editPlayerPoints } = this.props;
     const { editPlayerTurn } = this.props;
+    const {diceRollFalse} =this.props
+    diceRollFalse();
 
     var numberOfClicksOfOneTurn = this.state.players.length - 1;
     if (
@@ -112,27 +120,35 @@ class Players extends React.Component {
         key={player.id}
       />
     ));
+    var startPlayingElement = store.getState().player.players.length>1 ?  <button onClick={this.handleStartPlaying}>Start playing</button>
+    : <div></div>
+
+    var currentPlayer = store.getState().player.players.find(x=>x.id===this.props.playerTurnId);
+    console.log(currentPlayer);
+      if(currentPlayer)
+    var nextElement = (currentPlayer.turn===1 && currentPlayer.firstClick && currentPlayer.firstClickRoad) ||
+    (currentPlayer.turn===2 && currentPlayer.secondClick && currentPlayer.secondClickRoad) || (currentPlayer.turn>2 && this.props.diceRolled)? 
+    <button
+    onClick={this.handlePlayerTurn}
+  >
+    Next{" "}
+  </button> : <div></div>
 
     return (
       <div>
         <div className={this.state.startPlaying ? "hide" : "show"}>
           <PlayerInput handleClick={this.handleClick} />
           <div>{listItems}</div>
-          <button onClick={this.handleStartPlaying}>Start playing</button>
+          {startPlayingElement}
         </div>
 
         <div>
           {" "}
           {this.state.players.length > 0
-            ? this.state.players[0 + this.state.counter].name
+            ? `Player turn: ${this.state.players[0 + this.state.counter].name}` 
             : "no players"}{" "}
         </div>
-        <button
-          className={this.state.startPlaying ? "show" : "hide"}
-          onClick={this.handleCounter}
-        >
-          Next{" "}
-        </button>
+      {nextElement}
       </div>
     );
   }
@@ -143,10 +159,15 @@ const mapDispatchToProps = {
   editPlayerPoints,
   setPlayerTurn,
   substractPlayerCards,
-  editPlayerTurn
+  editPlayerTurn,
+  isDiceRolled,
+  diceRollFalse,
+  startGame
 };
 const mapStateToProps = state => ({
-  players: state.player.players
+  players: state.player.players,
+  playerTurnId:state.player.playerTurnId,
+  diceRolled : state.game.isDiceRolled
 });
 
 export default connect(

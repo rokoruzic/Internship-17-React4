@@ -23,6 +23,9 @@ const THROW_DICE = "THROW_DICE";
 const TOGGLE_ROAD_CREATE = "TOGGLE_ROAD_CREATE";
 const TOGGLE_SETTLEMENT_CREATE = "TOGGLE_SETTLEMENT_CREATE";
 const CREATE_CITY="CREATE_CITY";
+const IS_DICE_ROLLED="IS_DICE_ROLLED"
+const DICE_ROLL_FALSE="DICE_ROLLED_FALSE"
+const START_GAME = "START_GAME";
 
 // initial state
 const initialState = {
@@ -34,7 +37,9 @@ const initialState = {
   fields: [],
   dice: 0,
   isRoadCreated: false,
-  isSettlementCreated: false
+  isSettlementCreated: false,
+  isDiceRolled:false,
+  isGameStarted:false
 };
 
 // action creators
@@ -42,6 +47,21 @@ export const throwDice = payload => dispatch => {
   dispatch({
     type: THROW_DICE,
     payload
+  });
+};
+export const startGame = () => dispatch => {
+  dispatch({
+    type: START_GAME,
+  });
+};
+export const isDiceRolled = () => dispatch => {
+  dispatch({
+    type: IS_DICE_ROLLED,
+  });
+};
+export const diceRollFalse = () => dispatch => {
+  dispatch({
+    type: DICE_ROLL_FALSE,
   });
 };
 export const createCity = payload => dispatch => {
@@ -263,6 +283,21 @@ export const showError = message => {
 // reducer
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case START_GAME:
+    return{
+      ...state,
+      isGameStarted:true
+    }
+    case DICE_ROLL_FALSE:
+    return{
+      ...state,
+      isDiceRolled:false
+    }
+    case IS_DICE_ROLLED:
+    return {
+      ...state,
+      isDiceRolled:true
+    }
     case CREATE_CITY:
     let settlements1 = [...state.settlements];
     let settlementToEdit = settlements1.find(x=>x.id===action.payload.id && x.fieldId===action.payload.fieldId);

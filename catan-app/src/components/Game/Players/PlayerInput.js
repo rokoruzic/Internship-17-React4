@@ -1,4 +1,5 @@
 import React from "react";
+import store from "./../../../redux/index";
 class PlayerInput extends React.Component {
   constructor(props) {
     super(props);
@@ -16,6 +17,9 @@ class PlayerInput extends React.Component {
   }
 
   render() {
+    var addElement = this.state.value.length>0 && store.getState().player.players.length<4 ? <div>
+       <button onClick = {this.handleClick}>Add</button>
+    </div> : <div></div>
 
     return (
         <>
@@ -26,7 +30,7 @@ class PlayerInput extends React.Component {
           onChange={this.handleChange}
         />
       </div>
-      <button onClick = {this.handleClick}>Add</button>
+      {addElement}
       </>
     );
   }

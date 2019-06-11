@@ -2,6 +2,8 @@ import React from "react";
 import Field from "./Field";
 import { BoardNumbers, shuffle, FieldTypes } from "./BoardNumbers";
 import "./Board.css";
+import { connect } from "react-redux";
+
 class Board extends React.Component {
   constructor(props) {
     super(props);
@@ -26,6 +28,8 @@ class Board extends React.Component {
     var shuffledBoardPart3 = shuffledBoard.slice(7, 12);
     var shuffledBoardPart4 = shuffledBoard.slice(12, 16);
     var shuffledBoardPart5 = shuffledBoard.slice(16, 19);
+
+    
 
     var fieldRow1 = shuffledBoardPart1.map((item, index) => {
       return (
@@ -93,19 +97,33 @@ class Board extends React.Component {
       );
     });
 
+    var gameBoard = this.props.isGameStarted? <div className="wrapper"> 
+     <div className="field-row">{fieldRow1}</div>
+
+      <div className="field-row">{fieldRow2}</div>
+
+      <div className="field-row">{fieldRow3}</div>
+
+      <div className="field-row">{fieldRow4}</div>
+
+      <div className="field-row">{fieldRow5}</div>  
+          
+    </div>
+    : <div></div>
+
     return (
-      <div className="wrapper">
-        <div className="field-row">{fieldRow1}</div>
-
-        <div className="field-row">{fieldRow2}</div>
-
-        <div className="field-row">{fieldRow3}</div>
-
-        <div className="field-row">{fieldRow4}</div>
-
-        <div className="field-row">{fieldRow5}</div>
-      </div>
+    <div>{gameBoard}</div>
     );
   }
 }
-export default Board;
+
+
+const mapStateToProps = state => ({
+  isGameStarted : state.game.isGameStarted
+});
+
+export default connect(
+  mapStateToProps,
+  null
+)(Board);
+

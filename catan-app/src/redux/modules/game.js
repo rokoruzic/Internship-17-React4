@@ -22,6 +22,7 @@ const ADD_FIELDS = "ADD_FIELDS";
 const THROW_DICE = "THROW_DICE";
 const TOGGLE_ROAD_CREATE = "TOGGLE_ROAD_CREATE";
 const TOGGLE_SETTLEMENT_CREATE = "TOGGLE_SETTLEMENT_CREATE";
+const CREATE_CITY="CREATE_CITY";
 
 // initial state
 const initialState = {
@@ -40,6 +41,12 @@ const initialState = {
 export const throwDice = payload => dispatch => {
   dispatch({
     type: THROW_DICE,
+    payload
+  });
+};
+export const createCity = payload => dispatch => {
+  dispatch({
+    type: CREATE_CITY,
     payload
   });
 };
@@ -256,6 +263,15 @@ export const showError = message => {
 // reducer
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case CREATE_CITY:
+    let settlements1 = [...state.settlements];
+    let settlementToEdit = settlements1.find(x=>x.id===action.payload.id && x.fieldId===action.payload.fieldId);
+    settlementToEdit.isCity=true;
+    return Object.assign({}, state, {
+      settlements: settlements1
+    });
+
+
     case THROW_DICE:
       return Object.assign({}, state, {
         dice: action.payload
@@ -483,6 +499,20 @@ const reducer = (state = initialState, action) => {
           settlement.id === action.payload.id &&
           settlement.fieldId === action.payload.fieldId
       );
+      if (isAlreadySettlement && action.payload.playerTurn > 2)
+      {
+
+        if(action.payload.isCity)
+        return {
+          ...state,
+          message: "It is already a city"
+        };
+
+
+                         
+
+   
+    }
 
       if (isAlreadySettlement)
         return {
@@ -518,6 +548,8 @@ const reducer = (state = initialState, action) => {
             message: "you cant make more settlements on first 2 turns"
           };
         else if (action.payload.playerTurn > 2) {
+          
+
           if (isThereNeighbourRoad) {
             return Object.assign({}, state, {
               settlements: state.settlements.concat(action.payload),
@@ -543,8 +575,7 @@ const reducer = (state = initialState, action) => {
             return Object.assign({}, state, {
               settlements: state.settlements.concat(action.payload)
             });
-        } else if (action.payload.playerTurn > 2) {
-        } else {
+        }  else {
           return Object.assign({}, state, {
             settlements: state.settlements.concat(action.payload)
           });

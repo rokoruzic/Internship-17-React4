@@ -14,7 +14,8 @@ import { connect } from "react-redux";
 import {
   createFirstSettlement,
   createSecondSettlement,
-  toggleSettlementCreate
+  toggleSettlementCreate,
+  createCity
 } from "./../../../redux/modules/game";
 
 class Settlement extends React.Component {
@@ -36,6 +37,7 @@ class Settlement extends React.Component {
     const { editPlayerSecondClick } = this.props;
     const {toggleSettlementCreate} = this.props;
     const {buySettlement} = this.props;
+    const {createCity} =this.props;
 
     var currentPlayer = this.props.players.find(
       x => x.id === this.props.currentId
@@ -45,7 +47,8 @@ class Settlement extends React.Component {
       id: this.props.id,
       playerId: currentPlayer.id,
       color: currentPlayer.color,
-      playerTurn: currentPlayer.turn
+      playerTurn: currentPlayer.turn,
+      isCity:false
     };
 
     // var findSettlement = settlements.some(
@@ -97,10 +100,31 @@ class Settlement extends React.Component {
 
     if(currentPlayer.firstClick && currentPlayer.secondClick && currentPlayer.turn>2)
     {
+        var findSettlement = settlements.some(
+              settlement =>
+                settlement.id === this.props.id &&
+                settlement.fieldId === this.props.fieldId
+            );
+
 
       toggleSettlementCreate();
-      // if(currentPlayer.brick>0 && currentPlayer.lumber>0 && currentPlayer.wool>0 && currentPlayer.grain>0)
-      // {
+
+      if(findSettlement)
+      {
+      if(currentPlayer.rock>2 && currentPlayer.grain >1)
+      {
+      createCity(settlement);
+      this.setState({
+        color: currentPlayer.color
+      });
+      alert("city created")
+      }
+      else(alert("not enough resources for city"))
+    }
+      else
+      {
+      if(currentPlayer.brick>0 && currentPlayer.lumber>0 && currentPlayer.wool>0 && currentPlayer.grain>0)
+      {
       createFirstSettlement(settlement);
     
 
@@ -110,14 +134,16 @@ class Settlement extends React.Component {
       this.setState({
         color: currentPlayer.color
       });
+     
     }
+   
       else alert("macka")
-  // }
-  // else alert("not enough resources")
+  }
+  else alert("not enough resources")
     
     }
 
-
+  }
 
     // if (findSettlement && !currentPlayer.secondClick)
     //   this.setState({
@@ -142,7 +168,8 @@ const mapDispatchToProps = {
   editPlayerFirstClick,
   editPlayerSecondClick,
   toggleSettlementCreate,
-  buySettlement
+  buySettlement,
+  createCity
 };
 const mapStateToProps = state => ({
   currentId: state.player.playerTurnId,

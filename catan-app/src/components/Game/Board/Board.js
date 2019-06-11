@@ -13,7 +13,7 @@ class Board extends React.Component {
       var rObj = { number: obj, type: FieldTypes[i] };
       return rObj;
     });
-    var emptyField = { number: 0, type: "white" };
+    var emptyField = { number: 7, type: "white" };
     shuffledBoard.push(emptyField);
     shuffle(shuffledBoard);
     shuffledBoard = shuffledBoard.map((obj, i) => {

@@ -13,7 +13,7 @@ const EDIT_PLAYER_SECOND_CLICK = "EDIT_PLAYER_SECOND_CLICK";
 const EDIT_PLAYER_SECOND_CLICK_ROAD = "EDIT_PLAYER_SECOND_CLICK_ROAD";
 const UPDATE_PLAYERS = "UPDATE_PLAYERS";
 const BUY_ROAD="BUY_ROAD";
-
+const BUY_SETTLEMENT = "BUY_SETTLEMENT";
 // initial state
 const initialState = {
   players: [],
@@ -31,6 +31,12 @@ export const setPlayerTurn = payload => dispatch => {
 export const buyRoad = payload => dispatch => {
   dispatch({
     type: BUY_ROAD,
+    payload
+  });
+};
+export const buySettlement = payload => dispatch => {
+  dispatch({
+    type: BUY_SETTLEMENT,
     payload
   });
 };
@@ -95,6 +101,18 @@ export const addPlayerCards = payload => dispatch => {
 // reducer
 const reducer = (state = initialState, action) => {
   switch (action.type) {
+    case BUY_SETTLEMENT:
+    let playersUpdatedResourcesForSettlement = [...state.players]
+    let playerToEditResourcesForSettlement = playersUpdatedResourcesForSettlement.find(x => x.id === state.playerTurnId);
+    playerToEditResourcesForSettlement.brick-=1;
+    playerToEditResourcesForSettlement.lumber-=1;
+    playerToEditResourcesForSettlement.grain-=1;
+    playerToEditResourcesForSettlement.wool-=1;
+
+    return Object.assign({}, state, {
+      players: playersUpdatedResourcesForSettlement
+    });
+
     case BUY_ROAD:
     let playersUpdatedResources = [...state.players]
     let playerToEditResources = playersUpdatedResources.find(x => x.id === state.playerTurnId);

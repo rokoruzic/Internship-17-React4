@@ -17,10 +17,11 @@ const ADD_ROAD = "ADD_ROAD";
 const CHECK_ROAD_CONNECTION = "CHECK_ROAD_CONNECTION";
 const CREATE_ROAD = "CREATE_ROAD";
 const ADD_FIRST_ROAD = "ADD_FIRST_ROAD";
-const CREATE_FIRST_ROAD="CREATE_FIRST_ROAD"
+const CREATE_FIRST_ROAD = "CREATE_FIRST_ROAD";
 const ADD_FIELDS = "ADD_FIELDS";
 const THROW_DICE = "THROW_DICE";
-const TOGGLE_ROAD_CREATE = "TOGGLE_ROAD_CREATE"
+const TOGGLE_ROAD_CREATE = "TOGGLE_ROAD_CREATE";
+const TOGGLE_SETTLEMENT_CREATE = "TOGGLE_SETTLEMENT_CREATE";
 
 // initial state
 const initialState = {
@@ -31,7 +32,8 @@ const initialState = {
   message: "",
   fields: [],
   dice: 0,
-  isRoadCreated:false
+  isRoadCreated: false,
+  isSettlementCreated: false
 };
 
 // action creators
@@ -44,6 +46,12 @@ export const throwDice = payload => dispatch => {
 export const toggleRoadCreate = payload => dispatch => {
   dispatch({
     type: TOGGLE_ROAD_CREATE,
+    payload
+  });
+};
+export const toggleSettlementCreate = payload => dispatch => {
+  dispatch({
+    type: TOGGLE_SETTLEMENT_CREATE,
     payload
   });
 };
@@ -71,7 +79,7 @@ export const createRoad = payload => dispatch => {
   });
 };
 
-export const createFirstRoad = payload=> dispatch => {
+export const createFirstRoad = payload => dispatch => {
   dispatch({
     type: CREATE_FIRST_ROAD,
     payload
@@ -261,6 +269,114 @@ const reducer = (state = initialState, action) => {
       var subSettlements =
         SettlementCoords[action.payload.fieldId][action.payload.id];
 
+      var road1 = {};
+      var road2 = {};
+      var subRoad1 = {};
+      var subRoad2 = {};
+      var sub2Road1 = {};
+      var sub2Road2 = {};
+
+      var allNeighbourRoads = [];
+      road1 = {
+        fieldId: action.payload.fieldId,
+        roadId: action.payload.id - 1
+      };
+      road2 = { fieldId: action.payload.fieldId, roadId: action.payload.id };
+
+      if (action.payload.id === 0)
+        road1 = { fieldId: action.payload.fieldId, roadId: 5 };
+      console.log(subSettlements);
+      if (subSettlements) {
+        subRoad1 = {
+          fieldId: subSettlements[0].fieldId,
+          roadId: subSettlements[0].settlementId - 1
+        };
+        subRoad2 = {
+          fieldId: subSettlements[0].fieldId,
+          roadId: subSettlements[0].settlementId
+        };
+
+        if (subSettlements[0].settlementId === 0)
+          subRoad1 = { fieldId: subSettlements[0].fieldId, roadId: 5 };
+
+        allNeighbourRoads.push(subRoad1);
+        if (RoadCoords[subRoad1.fieldId][subRoad1.roadId])
+          allNeighbourRoads.push(RoadCoords[subRoad1.fieldId][subRoad1.roadId]);
+
+        allNeighbourRoads.push(subRoad2);
+        if (RoadCoords[subRoad2.fieldId][subRoad2.roadId])
+          allNeighbourRoads.push(RoadCoords[subRoad2.fieldId][subRoad2.roadId]);
+
+        if (subSettlements.length > 1) {
+          console.log(subSettlements);
+          sub2Road1 = {
+            fieldId: subSettlements[1].fieldId,
+            roadId: subSettlements[1].settlementId - 1
+          };
+          sub2Road2 = {
+            fieldId: subSettlements[1].fieldId,
+            roadId: subSettlements[1].settlementId
+          };
+
+          if (subSettlements[1].settlementId === 0)
+            sub2Road1 = { fieldId: subSettlements[1].fieldId, roadId: 5 };
+
+          allNeighbourRoads.push(sub2Road1);
+          if (RoadCoords[sub2Road1.fieldId][sub2Road1.roadId])
+            allNeighbourRoads.push(
+              RoadCoords[sub2Road1.fieldId][sub2Road1.roadId]
+            );
+
+          allNeighbourRoads.push(sub2Road2);
+          if (RoadCoords[sub2Road2.fieldId][sub2Road2.roadId])
+            allNeighbourRoads.push(
+              RoadCoords[sub2Road2.fieldId][sub2Road2.roadId]
+            );
+        }
+      }
+      allNeighbourRoads.push(road1);
+      if (RoadCoords[road1.fieldId][road1.roadId])
+        allNeighbourRoads.push(RoadCoords[road1.fieldId][road1.roadId]);
+
+      allNeighbourRoads.push(road2);
+
+      if (RoadCoords[road2.fieldId][road2.roadId])
+        allNeighbourRoads.push(RoadCoords[road2.fieldId][road2.roadId]);
+
+      var isThereNeighbourRoad = false;
+
+      state.roads.forEach(road => {
+        allNeighbourRoads.forEach(roadToCheck => {
+          console.log(roadToCheck);
+          if (
+            road.fieldId === roadToCheck.fieldId &&
+            road.id === roadToCheck.roadId
+          )
+            isThereNeighbourRoad = true;
+        });
+      });
+
+      var substituteStateRoads = [];
+      state.roads.forEach(road => {
+        if (RoadCoords[road.fieldId][road.id])
+          substituteStateRoads.push(RoadCoords[road.fieldId][road.id]);
+      });
+      console.log(substituteStateRoads);
+      if (!Object.getOwnPropertyNames(substituteStateRoads).length === 0) {
+        substituteStateRoads.roads.forEach(road => {
+          allNeighbourRoads.forEach(roadToCheck => {
+            console.log(roadToCheck);
+            if (
+              road.fieldId === roadToCheck.fieldId &&
+              road.roadId === roadToCheck.roadId
+            )
+              isThereNeighbourRoad = true;
+          });
+        });
+      }
+
+      console.log(isThereNeighbourRoad);
+
       var neighbourSettlement1 = {
         fieldId: action.payload.fieldId,
         settlementId: action.payload.id - 1
@@ -385,6 +501,7 @@ const reducer = (state = initialState, action) => {
           }
         });
       });
+      console.log(checkNearbySettlements);
 
       if (checkNearbySettlements) {
         return {
@@ -400,7 +517,18 @@ const reducer = (state = initialState, action) => {
             ...state,
             message: "you cant make more settlements on first 2 turns"
           };
-        else if (action.payload.playerTurn === 2) {
+        else if (action.payload.playerTurn > 2) {
+          if (isThereNeighbourRoad) {
+            return Object.assign({}, state, {
+              settlements: state.settlements.concat(action.payload),
+              isSettlementCreated: true
+            });
+          } else
+            return {
+              ...state,
+              message: "there is no nearby road"
+            };
+        } else if (action.payload.playerTurn === 2) {
           var filteredSettlements = state.settlements.filter(function(
             settlement
           ) {
@@ -434,11 +562,16 @@ const reducer = (state = initialState, action) => {
         isVisible: true,
         message: action.message
       };
-      case TOGGLE_ROAD_CREATE:
-      return{
+    case TOGGLE_ROAD_CREATE:
+      return {
         ...state,
-        isRoadCreated:false
-      }
+        isRoadCreated: false
+      };
+    case TOGGLE_SETTLEMENT_CREATE:
+      return {
+        ...state,
+        isSettlementCreated: false
+      };
 
     case CREATE_FIRST_ROAD:
       var road = action.payload;
@@ -450,11 +583,50 @@ const reducer = (state = initialState, action) => {
       newArray.forEach(item =>
         newArraySub.push(SettlementCoords[item.fieldId][item.id])
       );
+      console.log(newArraySub);
 
       var allRoads = [];
       var newSettlement = {};
       var newSettlement2 = {};
       var oldSettlement = {};
+
+      if (newArraySub[1]) {
+        var newSettlement3 = newArraySub[1][0];
+
+        var newSettlementRoad3 = {
+          fieldId: newSettlement3.fieldId,
+          roadId: newSettlement3.settlementId - 1
+        };
+        var newSettlementRoad4 = {
+          fieldId: newSettlement3.fieldId,
+          roadId: newSettlement3.settlementId
+        };
+
+        if (newSettlement3.settlementId === 0)
+          newSettlementRoad3 = { fieldId: newSettlement3.fieldId, roadId: 5 };
+
+        if (newArraySub[1].length === 2) {
+          var newSettlement4 = newArraySub[1][1];
+          var newSettlement2Road3 = {
+            fieldId: newSettlement4.fieldId,
+            roadId: newSettlement4.settlementId - 1
+          };
+          var newSettlement2Road4 = {
+            fieldId: newSettlement4.fieldId,
+            roadId: newSettlement4.settlementId
+          };
+
+          if (newSettlement4.settlementId === 0)
+            newSettlement2Road3 = {
+              fieldId: newSettlement4.fieldId,
+              roadId: 5
+            };
+          allRoads.push(newSettlement2Road3);
+          allRoads.push(newSettlement2Road4);
+        }
+        allRoads.push(newSettlementRoad3);
+        allRoads.push(newSettlementRoad4);
+      }
 
       if (newArraySub[0]) {
         newSettlement = newArraySub[0][0];
@@ -528,11 +700,22 @@ const reducer = (state = initialState, action) => {
         allRoads.push(secondSettlementRoad2);
       }
       var isRoadLegit = false;
+      var subMainRoad = RoadCoords[road.fieldId][road.id];
+
       allRoads.forEach(item => {
+        console.log(item);
         if (item.fieldId === road.fieldId && item.roadId === road.id) {
           isRoadLegit = true;
         }
+        if (subMainRoad)
+          if (
+            item.fieldId === subMainRoad.fieldId &&
+            item.roadId === subMainRoad.roadId
+          ) {
+            isRoadLegit = true;
+          }
       });
+      console.log(isRoadLegit);
 
       if (!isRoadLegit) {
         return {
@@ -549,10 +732,13 @@ const reducer = (state = initialState, action) => {
             message: "you cant make more roads on first 2 turns"
           };
         } else if (action.payload.turn === 2) {
+          console.log("vamo je greska");
+
           var filteredRoads = state.roads.filter(function(road) {
             return road.playerId === action.payload.playerId;
           });
           if (filteredRoads.length > 1) {
+            console.log("vamo je greska");
             return {
               ...state,
               message: "you cant make more roads on first 2 turns"
@@ -619,11 +805,26 @@ const reducer = (state = initialState, action) => {
 
         roadsToCheck.push(substituteRoadNeighbour1);
         roadsToCheck.push(substituteRoadNeighbour2);
-      if((RoadCoords[substituteRoadNeighbour1.fieldId][substituteRoadNeighbour1.roadId]))
-        roadsToCheck.push(RoadCoords[substituteRoadNeighbour1.fieldId][substituteRoadNeighbour1.roadId]);
-      if((RoadCoords[substituteRoadNeighbour2.fieldId][substituteRoadNeighbour2.roadId]))
-        roadsToCheck.push(RoadCoords[substituteRoadNeighbour2.fieldId][substituteRoadNeighbour2.roadId]);
-
+        if (
+          RoadCoords[substituteRoadNeighbour1.fieldId][
+            substituteRoadNeighbour1.roadId
+          ]
+        )
+          roadsToCheck.push(
+            RoadCoords[substituteRoadNeighbour1.fieldId][
+              substituteRoadNeighbour1.roadId
+            ]
+          );
+        if (
+          RoadCoords[substituteRoadNeighbour2.fieldId][
+            substituteRoadNeighbour2.roadId
+          ]
+        )
+          roadsToCheck.push(
+            RoadCoords[substituteRoadNeighbour2.fieldId][
+              substituteRoadNeighbour2.roadId
+            ]
+          );
       }
 
       var neighbourRoad1 = {
@@ -643,19 +844,18 @@ const reducer = (state = initialState, action) => {
       console.log(neighbourRoad1);
       roadsToCheck.push(neighbourRoad1);
       roadsToCheck.push(neighbourRoad2);
-      if((RoadCoords[neighbourRoad1.fieldId][neighbourRoad1.roadId]))
-      roadsToCheck.push(RoadCoords[neighbourRoad1.fieldId][neighbourRoad1.roadId]);
-      if((RoadCoords[neighbourRoad2.fieldId][neighbourRoad2.roadId]))
-      roadsToCheck.push(RoadCoords[neighbourRoad2.fieldId][neighbourRoad2.roadId]);
-
-
+      if (RoadCoords[neighbourRoad1.fieldId][neighbourRoad1.roadId])
+        roadsToCheck.push(
+          RoadCoords[neighbourRoad1.fieldId][neighbourRoad1.roadId]
+        );
+      if (RoadCoords[neighbourRoad2.fieldId][neighbourRoad2.roadId])
+        roadsToCheck.push(
+          RoadCoords[neighbourRoad2.fieldId][neighbourRoad2.roadId]
+        );
 
       var substituteAllRoads = [];
       state.roads.forEach(road => {
-        if (
-          (RoadCoords[road.fieldId][road.id])
-            
-        )
+        if (RoadCoords[road.fieldId][road.id])
           substituteAllRoads.push(RoadCoords[road.fieldId][road.id]);
       });
 
@@ -685,7 +885,7 @@ const reducer = (state = initialState, action) => {
       if (checkIfThereIsNeighbourRoad)
         return Object.assign({}, state, {
           roads: state.roads.concat(action.road),
-          isRoadCreated:true
+          isRoadCreated: true
         });
       else
         return {

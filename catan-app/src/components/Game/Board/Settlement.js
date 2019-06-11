@@ -7,12 +7,14 @@ import {
   setPlayerTurn,
   substractPlayerCards,
   editPlayerFirstClick,
-  editPlayerSecondClick
+  editPlayerSecondClick,
+  buySettlement
 } from "./../../../redux/modules/player";
 import { connect } from "react-redux";
 import {
   createFirstSettlement,
-  createSecondSettlement
+  createSecondSettlement,
+  toggleSettlementCreate
 } from "./../../../redux/modules/game";
 
 class Settlement extends React.Component {
@@ -21,7 +23,7 @@ class Settlement extends React.Component {
 
     this.state = {
       isVillage: false,
-      color: "pink",
+      color: "black",
       isFirstClick: true
     };
   }
@@ -32,11 +34,9 @@ class Settlement extends React.Component {
     const { settlements } = this.props;
     const { editPlayerFirstClick } = this.props;
     const { editPlayerSecondClick } = this.props;
+    const {toggleSettlementCreate} = this.props;
+    const {buySettlement} = this.props;
 
-    var cost = {};
-    // if(this.state.isVillage)
-    cost = { brick: 1, lumber: 1, wool: 1, grain: 1 };
-    // substractPlayerCards(cost);
     var currentPlayer = this.props.players.find(
       x => x.id === this.props.currentId
     );
@@ -48,11 +48,11 @@ class Settlement extends React.Component {
       playerTurn: currentPlayer.turn
     };
 
-    var findSettlement = settlements.some(
-      settlement =>
-        settlement.id === this.props.id &&
-        settlement.fieldId === this.props.fieldId
-    );
+    // var findSettlement = settlements.some(
+    //   settlement =>
+    //     settlement.id === this.props.id &&
+    //     settlement.fieldId === this.props.fieldId
+    // );
 
     if (!currentPlayer.firstClick) {
       createFirstSettlement(settlement);
@@ -95,10 +95,34 @@ class Settlement extends React.Component {
       }
     }
 
-    if (findSettlement && !currentPlayer.secondClick)
+    if(currentPlayer.firstClick && currentPlayer.secondClick && currentPlayer.turn>2)
+    {
+
+      toggleSettlementCreate();
+      // if(currentPlayer.brick>0 && currentPlayer.lumber>0 && currentPlayer.wool>0 && currentPlayer.grain>0)
+      // {
+      createFirstSettlement(settlement);
+    
+
+      if(store.getState().game.isSettlementCreated)
+      {
+        buySettlement(currentPlayer);
       this.setState({
         color: currentPlayer.color
       });
+    }
+      else alert("macka")
+  // }
+  // else alert("not enough resources")
+    
+    }
+
+
+
+    // if (findSettlement && !currentPlayer.secondClick)
+    //   this.setState({
+    //     color: currentPlayer.color
+    //   });
   };
 
   render() {
@@ -116,12 +140,15 @@ const mapDispatchToProps = {
   substractPlayerCards,
   createFirstSettlement,
   editPlayerFirstClick,
-  editPlayerSecondClick
+  editPlayerSecondClick,
+  toggleSettlementCreate,
+  buySettlement
 };
 const mapStateToProps = state => ({
   currentId: state.player.playerTurnId,
   players: state.player.players,
-  settlements: state.game.settlements
+  settlements: state.game.settlements,
+  isSettlementCreated:state.game.isSettlementCreated
 });
 
 export default connect(

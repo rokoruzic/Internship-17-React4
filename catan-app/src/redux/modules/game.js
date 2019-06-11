@@ -303,7 +303,8 @@ const reducer = (state = initialState, action) => {
     let settlementToEdit = settlements1.find(x=>x.id===action.payload.id && x.fieldId===action.payload.fieldId);
     settlementToEdit.isCity=true;
     return Object.assign({}, state, {
-      settlements: settlements1
+      settlements: settlements1,
+      message:"city created"
     });
 
 
@@ -798,13 +799,11 @@ const reducer = (state = initialState, action) => {
             message: "you cant make more roads on first 2 turns"
           };
         } else if (action.payload.turn === 2) {
-          console.log("vamo je greska");
 
           var filteredRoads = state.roads.filter(function(road) {
             return road.playerId === action.payload.playerId;
           });
           if (filteredRoads.length > 1) {
-            console.log("vamo je greska");
             return {
               ...state,
               message: "you cant make more roads on first 2 turns"

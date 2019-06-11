@@ -23,6 +23,11 @@ class Road extends React.Component {
       color: "black"
     };
   }
+  componentDidUpdate(){
+    if(this.props.message.lenght>1)
+    alert(this.props.message)
+
+  }
   handleClick =  async() => {
     const { createFirstRoad } = this.props;
     const { addRoad } = this.props;
@@ -143,7 +148,8 @@ const mapStateToProps = state => ({
   roads: state.game.roads,
   currentPlayerId: state.player.playerTurnId,
   players: state.player.players,
-  isRoadCreated:state.game.isRoadCreated
+  isRoadCreated:state.game.isRoadCreated,
+  message:state.game.message
 });
 
 export default connect(

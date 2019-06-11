@@ -29,6 +29,10 @@ class Settlement extends React.Component {
       isFirstClick: true
     };
   }
+  componentDidUpdate(){
+    if(this.props.message.lenght>1)
+    alert(this.props.message)
+  }
 
   handleClick = async () => {
     const { substractPlayerCards } = this.props;
@@ -192,7 +196,8 @@ const mapStateToProps = state => ({
   currentId: state.player.playerTurnId,
   players: state.player.players,
   settlements: state.game.settlements,
-  isSettlementCreated:state.game.isSettlementCreated
+  isSettlementCreated:state.game.isSettlementCreated,
+  message:state.game.message
 });
 
 export default connect(

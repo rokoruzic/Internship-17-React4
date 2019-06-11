@@ -8,6 +8,7 @@ class Board extends React.Component {
   constructor(props) {
     super(props);
   }
+ 
   render() {
     shuffle(BoardNumbers);
     shuffle(FieldTypes);
@@ -119,7 +120,8 @@ class Board extends React.Component {
 
 
 const mapStateToProps = state => ({
-  isGameStarted : state.game.isGameStarted
+  isGameStarted : state.game.isGameStarted,
+  message:state.game.message
 });
 
 export default connect(

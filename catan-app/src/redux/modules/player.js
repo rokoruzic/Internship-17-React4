@@ -14,6 +14,7 @@ const EDIT_PLAYER_SECOND_CLICK_ROAD = "EDIT_PLAYER_SECOND_CLICK_ROAD";
 const UPDATE_PLAYERS = "UPDATE_PLAYERS";
 const BUY_ROAD="BUY_ROAD";
 const BUY_SETTLEMENT = "BUY_SETTLEMENT";
+const BUY_CITY="BUY_CITY";
 // initial state
 const initialState = {
   players: [],
@@ -37,6 +38,12 @@ export const buyRoad = payload => dispatch => {
 export const buySettlement = payload => dispatch => {
   dispatch({
     type: BUY_SETTLEMENT,
+    payload
+  });
+};
+export const buyCity = payload => dispatch => {
+  dispatch({
+    type: BUY_CITY,
     payload
   });
 };
@@ -78,10 +85,9 @@ export const addPlayer = payload => dispatch => {
     payload
   });
 };
-export const editPlayerPoints = payload => dispatch => {
+export const editPlayerPoints =() => dispatch => {
   dispatch({
     type: EDIT_PLAYER_POINTS,
-    payload
   });
 };
 export const substractPlayerCards = payload => dispatch => {
@@ -113,6 +119,16 @@ const reducer = (state = initialState, action) => {
       players: playersUpdatedResourcesForSettlement
     });
 
+    case BUY_CITY:
+    let playersUpdatedResourcesForCity = [...state.players]
+    let playerToEditResourcesForCity = playersUpdatedResourcesForCity.find(x => x.id === state.playerTurnId);
+    playerToEditResourcesForCity.rock-=3;
+    playerToEditResourcesForCity.grain-=2;
+
+    return Object.assign({}, state, {
+      players: playersUpdatedResourcesForCity
+    });
+
     case BUY_ROAD:
     let playersUpdatedResources = [...state.players]
     let playerToEditResources = playersUpdatedResources.find(x => x.id === state.playerTurnId);
@@ -136,7 +152,7 @@ const reducer = (state = initialState, action) => {
     case EDIT_PLAYER_POINTS:
       let players = [...state.players];
       var playerToEdit = players.find(x => x.id === state.playerTurnId);
-      playerToEdit.points += action.payload;
+      playerToEdit.points += 1;
       return Object.assign({}, state, {
         players: players
       });

@@ -8,6 +8,7 @@ class PlayerList extends React.Component{
     }
 
     render(){
+
         const {players}=this.props;
         var playerList = store.getState().player.players.map((item, index) => {
             return (

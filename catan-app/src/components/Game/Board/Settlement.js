@@ -8,7 +8,8 @@ import {
   substractPlayerCards,
   editPlayerFirstClick,
   editPlayerSecondClick,
-  buySettlement
+  buySettlement,
+  buyCity
 } from "./../../../redux/modules/player";
 import { connect } from "react-redux";
 import {
@@ -38,6 +39,8 @@ class Settlement extends React.Component {
     const {toggleSettlementCreate} = this.props;
     const {buySettlement} = this.props;
     const {createCity} =this.props;
+    const {buyCity} = this.props;
+    const {editPlayerPoints}=this.props;
 
     var currentPlayer = this.props.players.find(
       x => x.id === this.props.currentId
@@ -67,7 +70,7 @@ class Settlement extends React.Component {
 
       if (filteredSettlements2.length === 1) {
         editPlayerFirstClick();
-
+        editPlayerPoints();
         this.setState({
           color: currentPlayer.color
         });
@@ -90,6 +93,8 @@ class Settlement extends React.Component {
       console.log(filteredSettlements);
 
       if (filteredSettlements.length === 2) {
+        editPlayerPoints();
+
         editPlayerSecondClick();
 
         this.setState({
@@ -113,10 +118,15 @@ class Settlement extends React.Component {
       {
       if(currentPlayer.rock>2 && currentPlayer.grain >1)
       {
+        buyCity(settlement)
+        editPlayerPoints();
       createCity(settlement);
+      
       this.setState({
         color: currentPlayer.color
       });
+      if(currentPlayer.points===10)
+        alert("Game over")
       alert("city created")
       }
       else(alert("not enough resources for city"))
@@ -130,10 +140,15 @@ class Settlement extends React.Component {
 
       if(store.getState().game.isSettlementCreated)
       {
+        editPlayerPoints();
+
         buySettlement(currentPlayer);
+        
       this.setState({
         color: currentPlayer.color
       });
+      if(currentPlayer.points===10)
+        alert("Game over")
      
     }
    
@@ -169,7 +184,9 @@ const mapDispatchToProps = {
   editPlayerSecondClick,
   toggleSettlementCreate,
   buySettlement,
-  createCity
+  createCity,
+  buyCity,
+  editPlayerPoints
 };
 const mapStateToProps = state => ({
   currentId: state.player.playerTurnId,

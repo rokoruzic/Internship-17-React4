@@ -32,7 +32,7 @@ class Players extends React.Component {
       name: value,
       id: Math.random(),
       color: colors[this.state.players.length],
-      points: 0,
+      points: 7,
       brick: 0,
       lumber: 0,
       wool: 0,

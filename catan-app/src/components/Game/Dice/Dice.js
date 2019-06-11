@@ -43,11 +43,44 @@ class Dice extends React.Component {
         if (item.fieldId === field.fieldId) {
           players.forEach(player => {
             if (player.id === item.playerId) {
-              if (field.type === "green") player.lumber += 1;
-              if (field.type === "lime") player.wool += 1;
-              if (field.type === "gray") player.rock += 1;
-              if (field.type === "yellow") player.grain += 1;
-              if (field.type === "gold") player.brick += 1;
+              if (field.type === "green"){
+                player.lumber += 1;
+                if(item.isCity)
+                player.lumber += 1;
+
+              }
+              if (field.type === "lime")
+              {
+                player.wool += 1;
+                if(item.isCity)
+                player.wool += 1;
+
+
+
+              }
+              if (field.type === "gray") {
+                player.rock += 1;
+                if(item.isCity)
+                player.rock += 1;
+
+
+              }
+              if (field.type === "yellow")
+              {
+               player.grain += 1;
+               if(item.isCity)
+               player.grain += 1;
+
+
+              }
+              if (field.type === "gold")
+              {
+               player.brick += 1;
+               if(item.isCity)
+               player.brick += 1;
+
+
+              }
             }
           });
           settlementsToCheck2.push(item);

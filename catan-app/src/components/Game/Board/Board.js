@@ -3,37 +3,43 @@ import Field from "./Field";
 import { BoardNumbers, shuffle, FieldTypes } from "./BoardNumbers";
 import "./Board.css";
 import { connect } from "react-redux";
-import store from "./../../../redux/index"
 
 class Board extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      shuffledBoard: []
+    };
   }
- 
-  render() {
+
+  componentDidMount() {
     shuffle(BoardNumbers);
     shuffle(FieldTypes);
-    var shuffledBoard = BoardNumbers.map((obj, i) => {
+    var boardWithFieldTypesAndNumbers = BoardNumbers.map((obj, i) => {
       var rObj = { number: obj, type: FieldTypes[i] };
       return rObj;
     });
     var emptyField = { number: 7, type: "white" };
-    shuffledBoard.push(emptyField);
-    shuffle(shuffledBoard);
-    shuffledBoard = shuffledBoard.map((obj, i) => {
+    boardWithFieldTypesAndNumbers.push(emptyField);
+    shuffle(boardWithFieldTypesAndNumbers);
+    var shuffledBoard = boardWithFieldTypesAndNumbers.map((obj, i) => {
       var rObj = { id: i, number: obj.number, type: obj.type };
       return rObj;
     });
 
-    var shuffledBoardPart1 = shuffledBoard.slice(0, 3);
-    var shuffledBoardPart2 = shuffledBoard.slice(3, 7);
-    var shuffledBoardPart3 = shuffledBoard.slice(7, 12);
-    var shuffledBoardPart4 = shuffledBoard.slice(12, 16);
-    var shuffledBoardPart5 = shuffledBoard.slice(16, 19);
+    this.setState({
+      shuffledBoard: shuffledBoard
+    });
+  }
 
-    
+  render() {
+    var shuffledBoardRow1 = this.state.shuffledBoard.slice(0, 3);
+    var shuffledBoardRow2 = this.state.shuffledBoard.slice(3, 7);
+    var shuffledBoardRow3 = this.state.shuffledBoard.slice(7, 12);
+    var shuffledBoardRow4 = this.state.shuffledBoard.slice(12, 16);
+    var shuffledBoardRow5 = this.state.shuffledBoard.slice(16, 19);
 
-    var fieldRow1 = shuffledBoardPart1.map((item, index) => {
+    var fieldRow1 = shuffledBoardRow1.map((item, index) => {
       return (
         <Field
           key={index}
@@ -46,7 +52,7 @@ class Board extends React.Component {
         />
       );
     });
-    var fieldRow2 = shuffledBoardPart2.map((item, index) => {
+    var fieldRow2 = shuffledBoardRow2.map((item, index) => {
       return (
         <Field
           key={index}
@@ -59,7 +65,7 @@ class Board extends React.Component {
         />
       );
     });
-    var fieldRow3 = shuffledBoardPart3.map((item, index) => {
+    var fieldRow3 = shuffledBoardRow3.map((item, index) => {
       return (
         <Field
           key={index}
@@ -72,7 +78,7 @@ class Board extends React.Component {
         />
       );
     });
-    var fieldRow4 = shuffledBoardPart4.map((item, index) => {
+    var fieldRow4 = shuffledBoardRow4.map((item, index) => {
       return (
         <Field
           key={index}
@@ -85,7 +91,7 @@ class Board extends React.Component {
         />
       );
     });
-    var fieldRow5 = shuffledBoardPart5.map((item, index) => {
+    var fieldRow5 = shuffledBoardRow5.map((item, index) => {
       return (
         <Field
           key={index}
@@ -99,33 +105,28 @@ class Board extends React.Component {
       );
     });
 
-    var gameBoard = this.props.isGameStarted? <div className="wrapper"> 
-     <div className="field-row">{fieldRow1}</div>
-
-      <div className="field-row">{fieldRow2}</div>
-
-      <div className="field-row">{fieldRow3}</div>
-
-      <div className="field-row">{fieldRow4}</div>
-
-      <div className="field-row">{fieldRow5}</div>  
-          
-    </div>
-    : <div></div>
-
-    return (
-    <div>{gameBoard}</div>
+    var gameBoard = this.props.isGameStarted ? (
+      <div className="wrapper">
+        <div className="field-row">{fieldRow1}</div>
+        <div className="field-row">{fieldRow2}</div>
+        <div className="field-row">{fieldRow3}</div>
+        <div className="field-row">{fieldRow4}</div>
+        <div className="field-row">{fieldRow5}</div>
+      </div>
+    ) : (
+      <div />
     );
+
+    return <div>{gameBoard}</div>;
   }
 }
 
-
 const mapStateToProps = state => ({
-  isGameStarted : state.game.isGameStarted,
+  isGameStarted: state.game.isGameStarted,
+  message: state.game.message
 });
 
 export default connect(
   mapStateToProps,
   null
 )(Board);
-

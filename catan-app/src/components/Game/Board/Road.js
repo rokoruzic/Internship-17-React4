@@ -20,24 +20,22 @@ class Road extends React.Component {
   }
   componentDidUpdate(){
     if(this.props.message.lenght>1)
-    alert(this.props.message)
+      alert(this.props.message)
 
   }
   handleClick =  async() => {
+
     const { createFirstRoad } = this.props;
     const { addRoad } = this.props;
     const {toggleRoadCreate} = this.props;
     const {buyRoad}=this.props;
-
-
     const { editPlayerFirstRoadClick } = this.props;
     const { editPlayerSecondRoadClick } = this.props;
-
-
 
     var currentPlayer = this.props.players.find(
       x => x.id === this.props.currentPlayerId
     );
+
     var roadToCreate = {
       id: this.props.id,
       fieldId: this.props.fieldId,
@@ -50,11 +48,11 @@ class Road extends React.Component {
     if (!currentPlayer.firstClickRoad) {
 
       createFirstRoad(roadToCreate);
-      var filteredRoads2 = store.getState().game.roads.filter(function(road) {
+      var isThisRoadCreated = store.getState().game.roads.some(function(road) {
         return road.playerId === currentPlayer.id;
       });
 
-      if (filteredRoads2.length === 1) {
+      if (isThisRoadCreated) {
         editPlayerFirstRoadClick();
 
         this.setState({
@@ -69,11 +67,11 @@ class Road extends React.Component {
       currentPlayer.turn === 2
     ) {
       createFirstRoad(roadToCreate);
-      var filteredRoads = store.getState().game.roads.filter(function(road) {
+      var previouslyMadeRoadsOfCurrentPlayer = store.getState().game.roads.filter(function(road) {
         return road.playerId === currentPlayer.id;
       });
 
-      if (filteredRoads.length === 2) {
+      if (previouslyMadeRoadsOfCurrentPlayer.length === 2) {
         editPlayerSecondRoadClick();
 
         this.setState({
@@ -82,27 +80,26 @@ class Road extends React.Component {
       } 
 
     }
-    if(currentPlayer.firstClickRoad && currentPlayer.secondClickRoad && currentPlayer.turn>2)
+    var isPreparationPhaseOver = currentPlayer.firstClickRoad && currentPlayer.secondClickRoad && currentPlayer.turn>2
+    if(isPreparationPhaseOver)
     {
-
       toggleRoadCreate();
       if(currentPlayer.brick>0 && currentPlayer.lumber>0)
       {
-      addRoad(roadToCreate);
-    
+        addRoad(roadToCreate);
 
-      if(store.getState().game.isRoadCreated)
-      {
-        buyRoad(currentPlayer);
-      this.setState({
-        color: currentPlayer.color
-      });
-    }
-      else alert("macka")
-  }
-  else alert("not enough resources")
+        if(store.getState().game.isRoadCreated)
+         {
+           buyRoad(currentPlayer);
+           this.setState({
+             color: currentPlayer.color
+             });
+           }
+         else alert("macka")
+       }
+       else alert("not enough resources")
     
-    }
+       }
 
   };
 

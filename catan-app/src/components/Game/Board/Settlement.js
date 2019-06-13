@@ -75,9 +75,10 @@ class Settlement extends React.Component {
       if (filteredSettlements2.length === 1) {
         editPlayerFirstClick();
         editPlayerPoints();
-        this.setState({
+        this.setState(() => ({
           color: currentPlayer.color
-        });
+        }));
+     
       }
     }
 

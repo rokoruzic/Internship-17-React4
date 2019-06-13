@@ -21,7 +21,7 @@ class Dice extends React.Component {
     isDiceRolled();
 
     var { throwDice } = this.props;
-    await this.setState(state => ({
+    await this.setState(()=> ({
       dice: RandomNumber(),
       isRolled: true
     }));

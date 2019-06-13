@@ -50,6 +50,7 @@ export const throwDice = payload => dispatch => {
   });
 };
 export const startGame = () => dispatch => {
+  alert("STARTED GAME")
   dispatch({
     type: START_GAME,
   });

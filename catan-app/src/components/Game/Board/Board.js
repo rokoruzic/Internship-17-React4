@@ -3,6 +3,7 @@ import Field from "./Field";
 import { BoardNumbers, shuffle, FieldTypes } from "./BoardNumbers";
 import "./Board.css";
 import { connect } from "react-redux";
+import store from "./../../../redux/index"
 
 class Board extends React.Component {
   constructor(props) {
@@ -121,7 +122,6 @@ class Board extends React.Component {
 
 const mapStateToProps = state => ({
   isGameStarted : state.game.isGameStarted,
-  message:state.game.message
 });
 
 export default connect(

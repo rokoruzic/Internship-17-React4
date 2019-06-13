@@ -1,10 +1,6 @@
-import RoadCoords from "./../../constants/RoadCoords";
-import SettlementCoords from "./../../constants/SettlementCoords";
-// action types
 const ADD_PLAYER = "ADD_PLAYER";
 const EDIT_PLAYER_POINTS = "EDIT_PLAYER_POINTS";
 const SET_PLAYER_TURN = "SET_PLAYER_TURN";
-const SUBSTRACT_PLAYER_CARDS = "SUBSTRACT_PLAYER_CARDS";
 const ADD_PLAYER_CARDS = "ADD_PLAYER_CARDS";
 const EDIT_PLAYER_TURN = "EDIT_PLAYER_TURN";
 const EDIT_PLAYER_FIRST_CLICK = "EDIT_PLAYER_FIRST_CLICK";
@@ -15,14 +11,12 @@ const UPDATE_PLAYERS = "UPDATE_PLAYERS";
 const BUY_ROAD="BUY_ROAD";
 const BUY_SETTLEMENT = "BUY_SETTLEMENT";
 const BUY_CITY="BUY_CITY";
-// initial state
 const initialState = {
   players: [],
   playerTurnId: 0,
   materialCost: {}
 };
 
-// action creators
 export const setPlayerTurn = payload => dispatch => {
   dispatch({
     type: SET_PLAYER_TURN,
@@ -59,22 +53,22 @@ export const editPlayerTurn = () => dispatch => {
     type: EDIT_PLAYER_TURN
   });
 };
-export const editPlayerFirstClick = () => dispatch => {
+export const editPlayerFirstSettlementClick = () => dispatch => {
   dispatch({
     type: EDIT_PLAYER_FIRST_CLICK
   });
 };
-export const editPlayerFirstClickRoad = () => dispatch => {
+export const editPlayerFirstRoadClick = () => dispatch => {
   dispatch({
     type: EDIT_PLAYER_FIRST_CLICK_ROAD
   });
 };
-export const editPlayerSecondClick = () => dispatch => {
+export const editPlayerSecondSettlementClick = () => dispatch => {
   dispatch({
     type: EDIT_PLAYER_SECOND_CLICK
   });
 };
-export const editPlayerSecondClickRoad = () => dispatch => {
+export const editPlayerSecondRoadClick = () => dispatch => {
   dispatch({
     type: EDIT_PLAYER_SECOND_CLICK_ROAD
   });
@@ -88,12 +82,6 @@ export const addPlayer = payload => dispatch => {
 export const editPlayerPoints =() => dispatch => {
   dispatch({
     type: EDIT_PLAYER_POINTS,
-  });
-};
-export const substractPlayerCards = payload => dispatch => {
-  dispatch({
-    type: SUBSTRACT_PLAYER_CARDS,
-    payload
   });
 };
 
@@ -212,20 +200,7 @@ const reducer = (state = initialState, action) => {
         playerTurnId: action.payload
       };
 
-    case ADD_PLAYER_CARDS:
-      return {};
-
-    case SUBSTRACT_PLAYER_CARDS:
-      let playersList = [...state.players];
-      var playerToEdit = playersList.find(x => x.id === state.playerTurnId);
-      playerToEdit.grain -= 1;
-      playerToEdit.lumber -= 1;
-      playerToEdit.wool -= 1;
-      playerToEdit.brick -= 1;
-      return Object.assign({}, state, {
-        players: playersList
-      });
-
+   
     default:
       return state;
   }

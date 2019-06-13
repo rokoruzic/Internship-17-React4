@@ -8,7 +8,6 @@ import {
   addPlayer,
   editPlayerPoints,
   setPlayerTurn,
-  substractPlayerCards,
   editPlayerTurn
 } from "./../../../redux/modules/player";
 import {isDiceRolled,diceRollFalse,startGame} from "./../../../redux/modules/game"
@@ -187,7 +186,6 @@ const mapDispatchToProps = {
   addPlayer,
   editPlayerPoints,
   setPlayerTurn,
-  substractPlayerCards,
   editPlayerTurn,
   isDiceRolled,
   diceRollFalse,

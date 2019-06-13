@@ -2,19 +2,15 @@ import React from "react";
 import "./Board.css";
 import store from "./../../../redux/index";
 import {
-  addPlayer,
   editPlayerPoints,
-  setPlayerTurn,
-  substractPlayerCards,
-  editPlayerFirstClick,
-  editPlayerSecondClick,
+  editPlayerFirstSettlementClick,
+  editPlayerSecondSettlementClick,
   buySettlement,
   buyCity
 } from "./../../../redux/modules/player";
 import { connect } from "react-redux";
 import {
   createFirstSettlement,
-  createSecondSettlement,
   toggleSettlementCreate,
   createCity
 } from "./../../../redux/modules/game";
@@ -35,11 +31,10 @@ class Settlement extends React.Component {
   }
 
   handleClick = async () => {
-    const { substractPlayerCards } = this.props;
     const { createFirstSettlement } = this.props;
     const { settlements } = this.props;
-    const { editPlayerFirstClick } = this.props;
-    const { editPlayerSecondClick } = this.props;
+    const { editPlayerFirstSettlementClick } = this.props;
+    const { editPlayerSecondSettlementClick } = this.props;
     const {toggleSettlementCreate} = this.props;
     const {buySettlement} = this.props;
     const {createCity} =this.props;
@@ -58,11 +53,6 @@ class Settlement extends React.Component {
       isCity:false
     };
 
-    // var findSettlement = settlements.some(
-    //   settlement =>
-    //     settlement.id === this.props.id &&
-    //     settlement.fieldId === this.props.fieldId
-    // );
 
     if (!currentPlayer.firstClick) {
       createFirstSettlement(settlement);
@@ -73,7 +63,7 @@ class Settlement extends React.Component {
         });
 
       if (filteredSettlements2.length === 1) {
-        editPlayerFirstClick();
+        editPlayerFirstSettlementClick();
         editPlayerPoints();
         this.setState(() => ({
           color: currentPlayer.color
@@ -81,8 +71,6 @@ class Settlement extends React.Component {
      
       }
     }
-
-    console.log(currentPlayer);
 
     if (
       currentPlayer.firstClick &&
@@ -95,12 +83,11 @@ class Settlement extends React.Component {
         .game.settlements.filter(function(settlement) {
           return settlement.playerId === currentPlayer.id;
         });
-      console.log(filteredSettlements);
 
       if (filteredSettlements.length === 2) {
         editPlayerPoints();
 
-        editPlayerSecondClick();
+        editPlayerSecondSettlementClick();
 
         this.setState({
           color: currentPlayer.color
@@ -165,10 +152,6 @@ class Settlement extends React.Component {
 
   }
 
-    // if (findSettlement && !currentPlayer.secondClick)
-    //   this.setState({
-    //     color: currentPlayer.color
-    //   });
   };
 
   render() {
@@ -183,10 +166,9 @@ class Settlement extends React.Component {
 }
 
 const mapDispatchToProps = {
-  substractPlayerCards,
   createFirstSettlement,
-  editPlayerFirstClick,
-  editPlayerSecondClick,
+  editPlayerFirstSettlementClick,
+  editPlayerSecondSettlementClick,
   toggleSettlementCreate,
   buySettlement,
   createCity,

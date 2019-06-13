@@ -3,14 +3,9 @@ import { connect } from "react-redux";
 import store from "../../../redux/index";
 import "./Board.css";
 import {createFirstRoad,addRoad,toggleRoadCreate} from "./../../../redux/modules/game"
-import RoadCoords from "../../../constants/RoadCoords";
 import {
-  addPlayer,
-  editPlayerPoints,
-  setPlayerTurn,
-  substractPlayerCards,
-  editPlayerFirstClickRoad,
-  editPlayerSecondClickRoad,
+  editPlayerFirstRoadClick,
+  editPlayerSecondRoadClick,
   buyRoad
 } from "../../../redux/modules/player";
 
@@ -35,11 +30,10 @@ class Road extends React.Component {
     const {buyRoad}=this.props;
 
 
-    const { editPlayerFirstClickRoad } = this.props;
-    const { editPlayerSecondClickRoad } = this.props;
+    const { editPlayerFirstRoadClick } = this.props;
+    const { editPlayerSecondRoadClick } = this.props;
 
 
-    const { roads } = this.props;
 
     var currentPlayer = this.props.players.find(
       x => x.id === this.props.currentPlayerId
@@ -51,16 +45,7 @@ class Road extends React.Component {
       color: currentPlayer.color,
       turn: currentPlayer.turn
     };
-    console.log(createFirstRoad)
 
-
-
-    // var findRoad = roads.some(
-    //   road =>
-    //     road.id === this.props.id &&
-    //     road.fieldId === this.props.fieldId &&
-    //     road.playerId === this.props.currentPlayerId
-    // );
 
     if (!currentPlayer.firstClickRoad) {
 
@@ -70,7 +55,7 @@ class Road extends React.Component {
       });
 
       if (filteredRoads2.length === 1) {
-        editPlayerFirstClickRoad();
+        editPlayerFirstRoadClick();
 
         this.setState({
           color: currentPlayer.color
@@ -89,18 +74,13 @@ class Road extends React.Component {
       });
 
       if (filteredRoads.length === 2) {
-        editPlayerSecondClickRoad();
+        editPlayerSecondRoadClick();
 
         this.setState({
           color: currentPlayer.color
         });
       } 
 
-      // if (findRoad && !currentPlayer.secondClickRoad) {
-      //   this.setState({
-      //     color: currentPlayer.color
-      //   });
-      // }
     }
     if(currentPlayer.firstClickRoad && currentPlayer.secondClickRoad && currentPlayer.turn>2)
     {
@@ -139,8 +119,8 @@ class Road extends React.Component {
 const mapDispatchToProps = {
   createFirstRoad,
   addRoad,
-  editPlayerFirstClickRoad,
-  editPlayerSecondClickRoad,
+  editPlayerFirstRoadClick,
+  editPlayerSecondRoadClick,
   toggleRoadCreate,
   buyRoad
 };

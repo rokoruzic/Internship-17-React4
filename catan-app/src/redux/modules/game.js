@@ -1,22 +1,13 @@
 import RoadCoords from "./../../constants/RoadCoords";
 import SettlementCoords from "./../../constants/SettlementCoords";
-import { init } from "events";
-import { newExpression } from "@babel/types";
 // action types
-const ADD_PLAYER = "ADD_PLAYER";
-const EDIT_PLAYER_POINTS = "EDIT_PLAYER_POINTS";
-const SET_PLAYER_TURN = "SET_PLAYER_TURN";
-const SUBSTRACT_PLAYER_CARDS = "SUBSTRACT_PLAYER_CARDS";
-const ADD_PLAYER_CARDS = "ADD_PLAYER_CARDS";
 const CREATE_FIRST_SETTLEMENT = "CREATE_FIRST_SETTLEMENT";
 const CREATE_SECOND_SETTLEMENT = "CREATE_SECOND_SETTLEMENT";
 const APPLY_ROAD = "APPLY_ROAD";
 const SHOW_ERROR = "SHOW_ERROR";
 const INCREMENT_ID = "INCREMENT_ID";
 const ADD_ROAD = "ADD_ROAD";
-const CHECK_ROAD_CONNECTION = "CHECK_ROAD_CONNECTION";
 const CREATE_ROAD = "CREATE_ROAD";
-const ADD_FIRST_ROAD = "ADD_FIRST_ROAD";
 const CREATE_FIRST_ROAD = "CREATE_FIRST_ROAD";
 const ADD_FIELDS = "ADD_FIELDS";
 const THROW_DICE = "THROW_DICE";
@@ -221,44 +212,44 @@ export const addRoad = road => dispatch => {
     ];
 
   if (settlementTwoSubstitutions) {
-    var settlementTwoSubstitutionsRoad1 = {
+    var settlementThreeSubstitutionsRoad1 = {
       field: settlementTwoSubstitutions[0].fieldId,
       roadId: settlementTwoSubstitutions[0].settlementId - 1
     };
-    var settlementTwoSubstitutionsRoad2 = {
+    var settlementThreeSubstitutionsRoad2 = {
       field: settlementTwoSubstitutions[0].fieldId,
       roadId: settlementTwoSubstitutions[0].settlementId
     };
 
     if (settlementTwoSubstitutions[0].settlementId === 0)
-      settlementTwoSubstitutionsRoad1 = {
+      settlementThreeSubstitutionsRoad1 = {
         field: settlementTwoSubstitutions[0].fieldId,
         roadId: 5
       };
 
-    neighbourRoads.push(settlementTwoSubstitutionsRoad1);
-    neighbourRoads.push(settlementTwoSubstitutionsRoad2);
+    neighbourRoads.push(settlementThreeSubstitutionsRoad1);
+    neighbourRoads.push(settlementThreeSubstitutionsRoad2);
 
     var isThereMoreThanTwoSubstitutionForSettlementTwo =
       settlementTwoSubstitutions.length === 2;
     if (isThereMoreThanTwoSubstitutionForSettlementTwo) {
-      var settlementTwoSubstitutionsRoad1 = {
+      var settlementTwoSubstitutionsRoad3 = {
         field: settlementTwoSubstitutions[1].fieldId,
         roadId: settlementTwoSubstitutions[1].settlementId - 1
       };
-      var settlementTwoSubstitutionsRoad2 = {
+      var settlementTwoSubstitutionsRoad4 = {
         field: settlementTwoSubstitutions[1].fieldId,
         roadId: settlementTwoSubstitutions[1].settlementId
       };
 
       if (settlementTwoSubstitutions[1].settlementId === 0)
-        settlementTwoSubstitutionsRoad2 = {
+        settlementTwoSubstitutionsRoad4 = {
           field: settlementTwoSubstitutions[1].fieldId,
           roadId: 5
         };
 
-      neighbourRoads.push(settlementTwoSubstitutionsRoad1);
-      neighbourRoads.push(settlementTwoSubstitutionsRoad2);
+      neighbourRoads.push(settlementTwoSubstitutionsRoad3);
+      neighbourRoads.push(settlementTwoSubstitutionsRoad4);
     }
   }
 
@@ -931,7 +922,7 @@ const reducer = (state = initialState, action) => {
         roadsToCheck.forEach(roadToCheck => {
           if (
             road.id === roadToCheck.roadId &&
-            road.fieldId === roadToCheck.fieldId
+            road.fieldId === roadToCheck.fieldId 
           )
             checkIfThereIsNeighbourRoad = true;
         });
@@ -941,7 +932,7 @@ const reducer = (state = initialState, action) => {
         roadsToCheck.forEach(roadToCheck => {
           if (
             road.id === roadToCheck.roadId &&
-            road.fieldId === roadToCheck.fieldId
+            road.fieldId === roadToCheck.fieldId && action.road.playerId === road.playerId
           )
             checkIfThereIsNeighbourRoad = true;
         });

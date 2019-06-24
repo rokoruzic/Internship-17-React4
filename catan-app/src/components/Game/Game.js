@@ -4,9 +4,6 @@ import Dice from "./Dice/Dice";
 import Board from "./Board/Board";
 import PlayerList from "./../Game/Players/PlayerList"
 class Game extends  React.Component{
-    constructor(props){
-        super(props)
-    };
     render(){
         return(
             <div>

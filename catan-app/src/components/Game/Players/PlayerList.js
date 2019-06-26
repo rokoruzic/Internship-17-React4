@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import store from "./../../../redux/index"
 
 class PlayerList extends React.Component{
 

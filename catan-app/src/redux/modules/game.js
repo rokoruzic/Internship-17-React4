@@ -253,7 +253,6 @@ export const addRoad = road => dispatch => {
     }
   }
 
-  console.log(neighbourRoads);
   dispatch({
     type: ADD_ROAD,
     road
@@ -536,9 +535,6 @@ const reducer = (state = initialState, action) => {
           message: "It is already a city"
         };
 
-
-                         
-
    
     }
 
@@ -559,6 +555,7 @@ const reducer = (state = initialState, action) => {
           }
         });
       });
+       console.log(allSubsSets);
       console.log(checkNearbySettlements);
 
       if (checkNearbySettlements) {

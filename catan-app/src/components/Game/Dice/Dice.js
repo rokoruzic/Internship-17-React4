@@ -40,7 +40,6 @@ class Dice extends React.Component {
         playerId: item.playerId
       });
     });
-
     settlements.forEach(item => {
       rolledFields.forEach(field => {
         if (item.fieldId === field.fieldId) {
@@ -125,8 +124,8 @@ class Dice extends React.Component {
   </button> : <div></div>
     return (
       <div>
-        {nextElement}
-        {this.state.dice}{" "}
+        {/* {nextElement} */}
+        {/* {this.state.dice}{" "} */}
       </div>
     );
   }

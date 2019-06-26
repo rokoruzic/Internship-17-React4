@@ -25,9 +25,8 @@ class Settlement extends React.Component {
       isFirstClick: true
     };
   }
-  componentDidUpdate(){
-    if(this.props.message.lenght>1)
-    alert(this.props.message)
+  componentDidUpdate() {
+    if (this.props.message.lenght > 1) alert(this.props.message);
   }
 
   handleClick = async () => {
@@ -35,11 +34,11 @@ class Settlement extends React.Component {
     const { settlements } = this.props;
     const { editPlayerFirstSettlementClick } = this.props;
     const { editPlayerSecondSettlementClick } = this.props;
-    const {toggleSettlementCreate} = this.props;
-    const {buySettlement} = this.props;
-    const {createCity} =this.props;
-    const {buyCity} = this.props;
-    const {editPlayerPoints}=this.props;
+    const { toggleSettlementCreate } = this.props;
+    const { buySettlement } = this.props;
+    const { createCity } = this.props;
+    const { buyCity } = this.props;
+    const { editPlayerPoints } = this.props;
 
     var currentPlayer = this.props.players.find(
       x => x.id === this.props.currentId
@@ -50,9 +49,8 @@ class Settlement extends React.Component {
       playerId: currentPlayer.id,
       color: currentPlayer.color,
       playerTurn: currentPlayer.turn,
-      isCity:false
+      isCity: false
     };
-
 
     if (!currentPlayer.firstClick) {
       createFirstSettlement(settlement);
@@ -68,7 +66,6 @@ class Settlement extends React.Component {
         this.setState(() => ({
           color: currentPlayer.color
         }));
-     
       }
     }
 
@@ -95,63 +92,53 @@ class Settlement extends React.Component {
       }
     }
 
-    if(currentPlayer.firstClick && currentPlayer.secondClick && currentPlayer.turn>2)
-    {
-        var findSettlement = settlements.some(
-              settlement =>
-                settlement.id === this.props.id &&
-                settlement.fieldId === this.props.fieldId
-            );
-
+    if (
+      currentPlayer.firstClick &&
+      currentPlayer.secondClick &&
+      currentPlayer.turn > 2
+    ) {
+      var findSettlement = settlements.some(
+        settlement =>
+          settlement.id === this.props.id &&
+          settlement.fieldId === this.props.fieldId
+      );
 
       toggleSettlementCreate();
 
-      if(findSettlement)
-      {
-      if(currentPlayer.rock>2 && currentPlayer.grain >1)
-      {
-        buyCity(settlement)
-        editPlayerPoints();
-      createCity(settlement);
-      
-      this.setState({
-        color: currentPlayer.color
-      });
-      if(currentPlayer.points===10)
-        alert("Game over")
-      alert("city created")
+      if (findSettlement) {
+        if (currentPlayer.rock > 2 && currentPlayer.grain > 1) {
+          buyCity(settlement);
+          editPlayerPoints();
+          createCity(settlement);
+
+          this.setState({
+            color: currentPlayer.color
+          });
+          if (currentPlayer.points === 10) alert("Game over");
+          alert("city created");
+        } else alert("not enough resources for city");
+      } else {
+        if (
+          currentPlayer.brick > 0 &&
+          currentPlayer.lumber > 0 &&
+          currentPlayer.wool > 0 &&
+          currentPlayer.grain > 0
+        ) {
+          createFirstSettlement(settlement);
+
+          if (store.getState().game.isSettlementCreated) {
+            editPlayerPoints();
+
+            buySettlement(currentPlayer);
+
+            this.setState({
+              color: currentPlayer.color
+            });
+            if (currentPlayer.points === 10) alert("Game over");
+          } else alert("macka");
+        } else alert("not enough resources");
       }
-      else(alert("not enough resources for city"))
     }
-      else
-      {
-      if(currentPlayer.brick>0 && currentPlayer.lumber>0 && currentPlayer.wool>0 && currentPlayer.grain>0)
-      {
-      createFirstSettlement(settlement);
-    
-
-      if(store.getState().game.isSettlementCreated)
-      {
-        editPlayerPoints();
-
-        buySettlement(currentPlayer);
-        
-      this.setState({
-        color: currentPlayer.color
-      });
-      if(currentPlayer.points===10)
-        alert("Game over")
-     
-    }
-   
-      else alert("macka")
-  }
-  else alert("not enough resources")
-    
-    }
-
-  }
-
   };
 
   render() {
@@ -179,8 +166,8 @@ const mapStateToProps = state => ({
   currentId: state.player.playerTurnId,
   players: state.player.players,
   settlements: state.game.settlements,
-  isSettlementCreated:state.game.isSettlementCreated,
-  message:state.game.message
+  isSettlementCreated: state.game.isSettlementCreated,
+  message: state.game.message
 });
 
 export default connect(
